@@ -2,19 +2,15 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button, Animated } from 'react-native';
 
 export default function App() {
-  // Хуки состояния для цвета и позиции
   const [color, setColor] = useState('blue');
   const [position, setPosition] = useState(new Animated.Value(0));
 
-  // Функция для изменения цвета и перемещения
+
   const handlePress = () => {
-    // Изменение цвета
     const newColor = color === 'blue' ? 'green' : 'blue';
     setColor(newColor);
-
-    // Анимация перемещения
     Animated.timing(position, {
-      toValue: position._value === 0 ? 100 : 0, // перемещение на 100 пикселей вниз
+      toValue: position._value === 0 ? 100 : 0, 
       duration: 500,
       useNativeDriver: true,
     }).start();
