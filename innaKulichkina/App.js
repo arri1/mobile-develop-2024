@@ -1,42 +1,57 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Button, Animated } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native';
 
-export default function App() {
-  const [color, setColor] = useState("blue");
-  const [position, setPosition] = useState(new Animated.Value(0));
+const CatFactApp = () => {
+  const [fact, setFact] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handlePress = () => {
-    const newColor = color === "blue" ? "green" : "blue";
-    setColor(newColor);
-    Animated.timing(position, {
-      toValue: position._value === 0 ? 100 : 0,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
+  const fetchCatFact = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('https://catfact.ninja/fact');
+      const data = await response.json();
+      setFact(data.fact);
+    } catch (error) {
+      console.error('Error fetching the cat fact:', error);
+    }
+    setLoading(false);
   };
+
+  useEffect(() => {
+    fetchCatFact();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Animated.View
-        style={[
-          styles.rectangle,
-          { backgroundColor: color, transform: [{ translateY: position }] },
-        ]}
-      />
-      <Button title="Change Color and Move" onPress={handlePress} />
+      <Text style={styles.title}>Cat Fact</Text>
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <Text style={styles.factText}>{fact}</Text>
+      )}
+      <Button title="Get Another Fact" onPress={fetchCatFact} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+    padding: 20,
   },
-  rectangle: {
-    width: 100,
-    height: 100,
-    backgroundColor: "blue",
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    fontWeight: 'bold',
+  },
+  factText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
   },
 });
+
+export default CatFactApp;
