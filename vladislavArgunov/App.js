@@ -1,18 +1,36 @@
-import { useState } from "react";
-import { StyleSheet, TextInput, Button, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Button, Text, View } from "react-native";
 
 export default function App() {
-  const [number, setNumber] = useState(0);
+  const [fact, setFact] = useState('нажми get it');
+  const [load, setLoad] = useState(false);
+
+  const getCatFact = async () => {
+    setLoad(true);
+    try {
+      const response = await fetch('https://catfact.ninja/fact');
+      const data = await response.json();
+      setFact(data.fact);
+    }
+    catch(error){
+      setFact('ошибка: ', error);
+    }
+    finally {
+      setLoad(false);
+    }
+
+  };
+
+  useEffect(() => {
+    getCatFact();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.defaultStyle}>{number}</Text>
+      <Text style={styles.defaultStyle}>{load ? 'Думаю...' : fact}</Text>
       <Text style={styles.defaultStyle}>Нажимай</Text>
       <View style={styles.defaultStyle}>
-        <Button title="на меня" onPress={() => setNumber(number + 1)} />
-      </View>
-      <View style={styles.defaultStyle}>
-        <Button title="не сюда" onPress={() => setNumber(-9999)} />
+        <Button title="get it" onPress={getCatFact} />
       </View>
     </View>
   );
@@ -28,5 +46,6 @@ const styles = StyleSheet.create({
   defaultStyle: {
     fontSize: 20,
     marginTop: 20,
+    marginHorizontal: 10,
   },
 });
