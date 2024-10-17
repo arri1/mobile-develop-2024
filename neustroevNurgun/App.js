@@ -1,20 +1,46 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
 
 export default function App() {
-  const [number, setNumber] = useState(0);
-  const onChangeText = (value) => {
-    setNumber(value.length);
+  const [randomFact, setRandomFact] = useState();
+  const [isLoading, setLoading] = useState(false);
+  const [todayFact, setTodayFact] = useState();
+
+  const getRandomFact = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("https://uselessfacts.jsph.pl/api/v2/facts/random");
+      const data = await response.json();
+      setRandomFact(data.text);
+    }
+    catch(e) {
+      setRandomFact(`Произошла ошибка: ${e.message}`);
+    }
+    setLoading(false);
   }
+  const getTodayFact = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("https://uselessfacts.jsph.pl/api/v2/facts/today");
+      const data = await response.json();
+      setTodayFact(`Сегодняшний факт: ${data.text}`);
+    }
+    catch(e) {
+      setTodayFact(`Произошла ошибка: ${e.message}`);
+    }
+    setLoading(false);
+  }
+  useEffect(() => {
+    getRandomFact();
+    getTodayFact();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        onChangeText={onChangeText}
-        placeholder="Введите текст"
-      />
-      <Text>{number}</Text>
+      <Text style={styles.text}>{randomFact}</Text>
+      <Button title="Случайный бесполезный факт" disabled={isLoading} onPress={getRandomFact} />
+      <Text style={styles.text}>{todayFact}</Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -27,9 +53,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  input: {
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 5
+  text: {
+    margin: 10,
+    marginTop: 50
   }
 });
