@@ -20,7 +20,6 @@ export default function App() {
     setLoading(false);
   }
   const getTodayFact = async () => {
-    setLoading(true);
     try {
       const response = await fetch("https://uselessfacts.jsph.pl/api/v2/facts/today");
       const data = await response.json();
@@ -29,7 +28,6 @@ export default function App() {
     catch(e) {
       setTodayFact(`Произошла ошибка: ${e.message}`);
     }
-    setLoading(false);
   }
   useEffect(() => {
     getRandomFact();
