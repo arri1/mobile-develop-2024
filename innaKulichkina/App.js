@@ -1,57 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import ColorAndMoveScreen from './screens/lab1'; 
+import CatFactApp from './screens/lab2'; 
+import MemoComponent from './screens/lab3'; 
 
-const CatFactApp = () => {
-  const [fact, setFact] = useState('');
-  const [loading, setLoading] = useState(false);
+const Tab = createBottomTabNavigator();
 
-  const fetchCatFact = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('https://catfact.ninja/fact');
-      const data = await response.json();
-      setFact(data.fact);
-    } catch (error) {
-      console.error('Error fetching the cat fact:', error);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchCatFact();
-  }, []);
-
+export default function App() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Cat Fact</Text>
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <Text style={styles.factText}>{fact}</Text>
-      )}
-      <Button title="Get Another Fact" onPress={fetchCatFact} />
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="№1" component={ColorAndMoveScreen} />
+        <Tab.Screen name="№2" component={CatFactApp} />
+        <Tab.Screen name="№3" component={MemoComponent} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    fontWeight: 'bold',
-  },
-  factText: {
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-});
-
-export default CatFactApp;
+}
