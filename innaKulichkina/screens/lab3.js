@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 
-const sum = (n) => {
+const square = (n) => {
   return n * n;
 };
 
 const MemoComponent = () => {
   const [isGreen, setIsGreen] = useState(true); 
   const [num, setNum] = useState(1);
-  const result = useMemo(() => sum(num), [num]);
+  const result = useMemo(() => square(num), [num]);
 
   return (
     <View style={styles.container}>
