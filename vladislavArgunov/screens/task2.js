@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Button, Text, View } from "react-native";
 
 const Task2 = () => {
-  const [fact, setFact] = useState();
+  const [fact, setFact] = useState("");
   const [loadT, setLoadT] = useState(false);
 
   const getCatFact = async () => {
+    setLoadT(true);
     try {
       const response = await fetch("https://catfact.ninja/fact");
       const data = await response.json();
@@ -16,7 +17,6 @@ const Task2 = () => {
   };
 
   const getTranslate = async () => {
-    setLoadT(true);
     try {
       const response = await fetch(
         `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
@@ -24,10 +24,11 @@ const Task2 = () => {
         )}&langpair=en|ru`
       );
       const data = await response.json();
-      freetrans = data.responseData.translatedText.includes(
-        "YOU USED ALL AVAILABLE FREE TRANSLATIONS"
-      );
-      if (freetrans) {
+      if (
+        data.responseData.translatedText.includes(
+          "YOU USED ALL AVAILABLE FREE TRANSLATIONS"
+        )
+      ) {
         return;
       }
       setFact(data.responseData.translatedText);
@@ -40,12 +41,18 @@ const Task2 = () => {
 
   const getCatFactAndTransIt = async () => {
     await getCatFact();
-    await getTranslate();
+    if (fact) {
+      await getTranslate();
+    }
   };
 
   useEffect(() => {
-    getCatFactAndTransIt();
-  }, []);
+    if (fact) {
+      getTranslate();
+    } else {
+      getCatFact();
+    }
+  }, [fact]);
 
   return (
     <View style={styles.container}>
@@ -63,24 +70,24 @@ const Task2 = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#87CEEB", // Нежно-голубой фон
+    backgroundColor: "#87CEEB", 
     alignItems: "center",
     justifyContent: "center",
   },
   content: {
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#FFFFFF", // Белый фон для блока текста
-    borderRadius: 10, // Скругленные углы
-    shadowColor: "#000", // Тень для блока
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10, 
+    shadowColor: "#000", 
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    elevation: 5, // Для Android
+    elevation: 5,
   },
   title: {
     fontSize: 24,
-    color: "#333", // Тёмно-серый цвет текста
+    color: "#333",
     textAlign: "center",
     marginBottom: 10,
   },

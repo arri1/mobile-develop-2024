@@ -1,13 +1,31 @@
-import React, { useMemo } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import React, { useMemo, useState } from "react";
+import { View, StyleSheet, TextInput } from "react-native";
+import QRCode from "react-native-qrcode-svg";
 
 const Task3 = () => {
-  const mem = useMemo(() => "Hello, World!");
+  const [link, setLink] = useState("");
+
+  const linkChanged = (text) => {
+    setLink(text);
+  };
+  const memoQR = useMemo(() => {
+    return (
+      <QRCode value={link ? link : "https://www.google.com/"} size={228} />
+    );
+  }, [link]);
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>{mem}</Text>
+        <View style={styles.content}>{memoQR}</View>
+        <View style={styles.subContent}>
+          <TextInput
+            style={styles.input}
+            onChangeText={linkChanged}
+            value={link}
+            placeholder="https://www.google.com/"
+          />
+        </View>
       </View>
     </View>
   );
@@ -16,33 +34,34 @@ const Task3 = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#87CEEB", // Нежно-голубой фон
+    backgroundColor: "#87CEEB",
     alignItems: "center",
     justifyContent: "center",
   },
   content: {
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#FFFFFF", // Белый фон для блока текста
-    borderRadius: 10, // Скругленные углы
-    shadowColor: "#000", // Тень для блока
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    elevation: 5, // Для Android
+    elevation: 5,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#333", // Тёмно-серый цвет текста
-    textAlign: "center",
-    marginBottom: 10,
+  subContent: {
+    alignItems: "center",
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#FFFFFF",
   },
-  subtitle: {
-    fontSize: 18,
-    color: "#555", // Серый текст
+  input: {
+    alignContent: "center",
+    width: 230,
+    borderWidth: 1,
+    padding: 5,
     textAlign: "center",
-    marginBottom: 20,
+    textAlignVertical: "center",
   },
 });
 
