@@ -25,3 +25,7 @@ LAB4: State-Manager (redux)
     useDispatch для отправки действий по добавлению и удалению задач.
     FlatList для отображения списка задач с рендерингом каждого элемента.
     ListEmptyComponent для отображения текста при пустом списке.
+
+
+FIGMA:
+https://www.figma.com/design/m4dhlKbEqYRyW6UTxyeqt6/nikolaevEvgeniy-IVT-21-2?node-id=0-1&p=f&t=ZFkuFtz8yudQyYTC-0

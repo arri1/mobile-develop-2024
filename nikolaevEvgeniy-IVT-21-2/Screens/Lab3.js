@@ -18,7 +18,7 @@ const Lab3 = () => {
 
   return (
     <View style={commonStyles.container}>
-      <Text style={commonStyles.title}>Lab3: Список задач</Text>
+      <Text style={commonStyles.title}>Lab3:State-manager (redux)</Text>
       <TextInput
         style={commonStyles.input}
         placeholder="Введите задачу"
@@ -35,7 +35,7 @@ const Lab3 = () => {
           <View style={commonStyles.taskItem}>
             <Text>{item.title}</Text>
             <TouchableOpacity onPress={() => dispatch(removeTask(item.id))}>
-              <Text style={{ color: "red", marginTop: 5 }}>Удалить</Text>
+              <Text style={{ color: "red", margintop: 100 }}>Удалить</Text>
             </TouchableOpacity>
           </View>
         )}
