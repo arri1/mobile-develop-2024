@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { View, StyleSheet, TextInput } from "react-native";
 import QRCode from "react-native-qrcode-svg";
+import store from "../store/store"
+import { Provider } from 'react-redux'
 
 const Task3 = () => {
   const [link, setLink] = useState("");

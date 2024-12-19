@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Button, Text, View } from "react-native";
+import store from "../store/store"
+import { Provider } from 'react-redux'
 
 const Task2 = () => {
   const [fact, setFact] = useState("");

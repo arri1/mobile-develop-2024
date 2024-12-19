@@ -5,8 +5,8 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import Task2 from "./screens/task2";
-import Task3 from "./screens/task3";
+import Task2 from "./app/screens/task2";
+import Task3 from "./app/screens/task3";
 
 const Tab = createBottomTabNavigator();
 
