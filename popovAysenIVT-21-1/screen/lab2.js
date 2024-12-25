@@ -1,33 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { ThemeContext } from '../App';
 
-export default function App() {
+export default function Lab2() {
+  const isDarkMode = useContext(ThemeContext);
+
   const [data, setData] = useState([]); // Хранение данных из API
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Функция для получения данных
     const fetchData = async () => {
       try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts'); // API-запрос
-        const result = await response.json(); 
-        setData(result); 
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+        const result = await response.json();
+        setData(result);
       } catch (err) {
-        setError('Ошибка загрузки данных'); 
+        setError('Ошибка загрузки данных');
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
-    fetchData(); 
-  }, []); 
+    fetchData();
+  }, []);
+
+  // Стили в зависимости от темы
+  const styles = getStyles(isDarkMode);
 
   if (loading) {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Загрузка данных...</Text>
+        <Text style={styles.text}>Загрузка данных...</Text>
       </View>
     );
   }
@@ -57,44 +62,51 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#f5f5f5',
-  },
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  item: {
-    padding: 15,
-    marginBottom: 10,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  itemTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  itemBody: {
-    marginTop: 5,
-    fontSize: 14,
-    color: '#555',
-  },
-  error: {
-    color: 'red',
-    fontSize: 18,
-  },
-});
+function getStyles(isDarkMode) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 20,
+      backgroundColor: isDarkMode ? '#333' : '#f5f5f5',
+    },
+    center: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      textAlign: 'center',
+      color: isDarkMode ? '#fff' : '#000',
+    },
+    item: {
+      padding: 15,
+      marginBottom: 10,
+      backgroundColor: isDarkMode ? '#555' : '#fff',
+      borderRadius: 8,
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+    },
+    itemTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: isDarkMode ? '#fff' : '#000',
+    },
+    itemBody: {
+      marginTop: 5,
+      fontSize: 14,
+      color: isDarkMode ? '#ddd' : '#555',
+    },
+    error: {
+      color: 'red',
+      fontSize: 18,
+    },
+    text: {
+      color: isDarkMode ? '#fff' : '#000',
+    },
+  });
+}
