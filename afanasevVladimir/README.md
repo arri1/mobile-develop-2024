@@ -1,0 +1,1 @@
+Ссылка на Figma: https://www.figma.com/design/RaojUdgRHvICUc5qfehzz1/AfanasevVladimir?node-id=0-1&t=eieTQLYQiVhOJVW3-1
