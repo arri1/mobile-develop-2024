@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { StyleSheet } from "react-native";
 import Lab1Screen from "./screens/lab1";
+import Lab2Screen from "./screens/lab2";
 import "../global.css";
 
 const Tab = createBottomTabNavigator();
@@ -22,7 +23,7 @@ const App = () => {
                 iconName = focused ? "home" : "home-outline";
                 break;
               default:
-                iconName = "default";
+                iconName = focused ? "home" : "home-outline";
                 break;
             }
 
@@ -54,10 +55,17 @@ const App = () => {
         })}
       >
         <Tab.Screen
-          name="Главная"
+          name="Lab 1"
           component={Lab1Screen}
           options={{
             title: "Lab 1",
+          }}
+        />
+        <Tab.Screen
+          name="Lab 2"
+          component={Lab2Screen}
+          options={{
+            title: "Lab 2",
           }}
         />
       </Tab.Navigator>
