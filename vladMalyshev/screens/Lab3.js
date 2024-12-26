@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import {
   View,
   Text,
@@ -6,9 +6,11 @@ import {
   FlatList,
   Button,
   StyleSheet,
+  Switch,
 } from "react-native";
 
 const Lab3 = () => {
+  const [onMemo, setOnMemo] = useState(true);
   const [filterText, setFilterText] = useState("");
   const [newName, setNewName] = useState("");
   const [names, setNames] = useState([
@@ -23,12 +25,27 @@ const Lab3 = () => {
     "Ivy",
     "Jack",
   ]);
+  const leng = 100000000;
+  const bigFunc = () => {
+    for (let i = 0; i < leng; i++) {}
+  };
+  const bigFuncMemo = useCallback(() => {
+    for (let i = 0; i < leng; i++) {}
+    return 0;
+  }, []);
 
   const filteredNames = useMemo(() => {
+    bigFuncMemo();
     return names.filter((name) =>
-      name.toLowerCase().includes(filterText.toLowerCase())
+      name.toLowerCase().includes(filterText.toLowerCase()),
     );
   }, [filterText, names]);
+  const filteredNamesWithoutMemo = () => {
+    bigFunc();
+    return names.filter((name) =>
+      name.toLowerCase().includes(filterText.toLowerCase()),
+    );
+  };
 
   const addName = () => {
     if (newName.trim()) {
@@ -43,6 +60,7 @@ const Lab3 = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Лабораторная 3</Text>
       </View>
+      <Switch value={onMemo} onChange={() => setOnMemo(!onMemo)} />
 
       {/* Основное содержимое */}
       <Text style={styles.title}>Фильтр имен</Text>
@@ -60,7 +78,7 @@ const Lab3 = () => {
       />
       <Button title="Добавить имя" onPress={addName} />
       <FlatList
-        data={filteredNames}
+        data={onMemo ? filteredNames : filteredNamesWithoutMemo()}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
@@ -75,6 +93,7 @@ const Lab3 = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    gap: 4,
     backgroundColor: "#f5f5f5",
   },
   header: {
