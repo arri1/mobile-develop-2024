@@ -1,35 +1,48 @@
-import { useState } from "react";
-import { Text } from "react-native";
-import { SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
+import Lab1 from "./lab1";
+import Lab2 from "./lab2";
+import Lab3 from "./lab3";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { StyleSheet, View } from "react-native";
+import { ThemeProvider, useTheme } from "../ThemeContext";
+import { NavigationContainer } from "@react-navigation/native";
 
-export default function Index() {
-  const emoji = ['🍉','🍌','🍓','🍏', '🍊','🍑'];
+const Tab = createBottomTabNavigator();
 
-  const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0)
-
-  const changeEmo = () => {
-    setCurrent((prevIndex) => (prevIndex + 1) % emoji.length);
-    setCount((prev) => (prev + 1));
-  };
+const ThemedIndex = () => {
+  const { isDarkTheme } = useTheme();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>FRUIT KOMBAT</Text>
-      <TouchableOpacity onPress={changeEmo} style={styles.emojiContainer}>
-        <Text style={styles.emoji}>{emoji[current]}</Text>
-      </TouchableOpacity>
-      <Text style={styles.counter}>FruitCoin: {count} $$</Text>
-    </SafeAreaView>
+    <View style={isDarkTheme ? styles.darkContainer : styles.lightContainer}>
+      <Tab.Navigator>
+        <Tab.Screen name="Лаба 1" component={Lab1} />
+        <Tab.Screen name="Лаба 2" component={Lab2} />
+        <Tab.Screen name="Лаба 3" component={Lab3} />
+      </Tab.Navigator>
+    </View>
+  );
+};
+export default function Index() {
+  return (
+    <ThemeProvider>
+      <ThemedIndex />
+    </ThemeProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  darkContainer: {
+    flex: 1,
+    backgroundColor: "#333",
+  },
+  lightContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   header: {
     fontSize: 40,
@@ -37,14 +50,14 @@ const styles = StyleSheet.create({
   },
   emojiContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   emoji: {
     fontSize: 100,
   },
-  counter:{
+  counter: {
     fontSize: 30,
     marginTop: 20,
-  }
+  },
 });

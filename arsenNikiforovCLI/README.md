@@ -1,79 +1,130 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+Вот обновленная версия с добавлением информации о лабораторных работах Lab4, Lab5 и Lab6:
 
-# Getting Started
+---
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+# Лабораторные работы
 
-## Step 1: Start the Metro Server
+## Автор: Никифоров Арсен
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+### Группа: ФИИТ-21
 
-To start Metro, run the following command from the _root_ of your React Native project:
+---
 
-```bash
-# using npm
-npm start
+## Lab1: Игра с пузырьками
 
-# OR using Yarn
-yarn start
-```
+### Описание:
 
-## Step 2: Start your Application
+Реализована простая игра, в которой пользователь должен перетаскивать пузырьки на экране. Основные особенности игры:
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+- Анимация и перетаскивание пузырьков с помощью **Animated** и **PanResponder**.
+- Ведение счёта и отображение таймера окончания игры с использованием хуков **useState** и **useEffect**.
+- Интерфейс с динамически обновляемыми элементами.
+- Игра завершается, когда время на таймере истекает, и выводится итоговый счёт.
 
-### For Android
+---
 
-```bash
-# using npm
-npm run android
+## Lab2: NASA APOD API
 
-# OR using Yarn
-yarn android
-```
+### Описание:
 
-### For iOS
+Приложение для работы с NASA Astronomy Picture of the Day (APOD) API. Основные возможности:
 
-```bash
-# using npm
-npm run ios
+- Загрузка случайных изображений с описанием с помощью NASA APOD API.
+- Использование хуков **useReducer**, **useContext**, **useCallback** и **useMemo** для оптимизации управления состоянием и загрузки данных.
+- Возможность сохранения изображений в избранное с помощью кнопки "Сохранить в избранное", где изображение сохраняется в глобальное состояние.
+- Реализован просмотр сохранённых изображений через экран галереи, где отображаются данные о сохранённых изображениях (заголовок, дата, описание).
+- Интерфейс с элементами навигации и адаптивной версткой.
 
-# OR using Yarn
-yarn ios
-```
+---
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+## Lab3: Космический калькулятор
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+### Описание:
 
-## Step 3: Modifying your App
+Игра, в которой пользователь решает математические задачи для спасения галактики. Основные особенности:
 
-Now that you have successfully run the app, let's modify it.
+- Генерация математических задач с возрастающей сложностью.
+- Игрок продвигается по уровням, правильно отвечая на вопросы.
+- Игра завершается победой при достижении 10 уровня.
+- Игра завершается поражением при совершении 3 ошибок.
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+### Технологии:
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+- Использование хуков **useState**, **useMemo**, **useCallback** для управления состоянием и оптимизации.
+- Тактильная отдача и анимации для улучшения пользовательского опыта.
 
-## Congratulations! :tada:
+### Интерфейс:
 
-You've successfully run and modified your React Native App. :partying_face:
+- Космическая тематика с использованием фоновых изображений и градиентов.
+- Интерактивный интерфейс с виртуальной клавиатурой для ввода ответов.
 
-### Now what?
+---
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+## Lab4: Redux и смена темы
 
-# Troubleshooting
+### Описание:
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+В этом задании реализована работа с библиотекой Redux для управления состоянием приложения и функционалом смены темы. Основные возможности:
 
-# Learn More
+- Использование Redux для управления глобальным состоянием приложения.
+- Реализована система переключения между светлой и тёмной темами, используя действия и редьюсеры.
+- Применение стилей с учетом текущей темы и динамическое изменение интерфейса.
+  
+### Технологии:
 
-To learn more about React Native, take a look at the following resources:
+- Redux для глобального управления состоянием.
+- Реализация смены темы с помощью контекста и хуков.
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+---
+
+## Lab5: Figma и создание макета приложения
+
+### Описание:
+
+В этой лабораторной работе был создан макет интерфейса приложения в Figma. Основные этапы работы:
+
+- Проектирование интерфейса с учетом функциональных требований.
+- Разработка пользовательского интерфейса с использованием компонентов и взаимодействий в Figma.
+- Обсуждение принципов адаптивности и визуальных решений для мобильных устройств.
+
+### Технологии:
+
+- Figma для создания макетов интерфейса.
+- Принципы UX/UI дизайна.
+
+[**Figma Design**](https://www.figma.com/design/7vNLU8U3sQsqcYa2tntB0c/arsenNikiforov?node-id=0-1&t=PfiiHdyS2WxziWG8-1)
+
+---
+
+## Lab6: Внедрение дизайна с Figma в React Native
+
+### Описание:
+
+В этой лабораторной работе был внедрён макет интерфейса, созданный в Figma, в проект React Native. Основные этапы работы:
+
+- Перенос элементов дизайна с Figma в код React Native.
+- Создание и настройка компонентов интерфейса, соответствующих макету.
+- Интеграция с компонентами и навигацией приложения, с учётом особенностей дизайна.
+- Применение стилей и адаптивности для мобильных устройств.
+
+### Технологии:
+
+- React Native для разработки мобильных приложений.
+- Интеграция макета Figma в проект.
+
+---
+
+## Навигация и стилизация
+
+- Приложение использует библиотеку **@react-navigation/native** для навигации между экранами.
+- Применены стили и фоновые изображения для улучшения интерфейса.
+
+---
+
+## Дополнительно
+
+Проект макета интерфейса доступен для просмотра в Figma.
+
+---
+
+Теперь информация о Lab4, Lab5 и Lab6 добавлена и отражает суть каждой работы.

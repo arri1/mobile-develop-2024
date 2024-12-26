@@ -1,3 +1,13 @@
+/myFiles/
+/assets/figma_materials/
+сохраненные_файлы.txt
+ЗАПУСК.cmd
+copy.sh
+
+#VS Code
+.vscode/
+
+
 # OSX
 #
 .DS_Store

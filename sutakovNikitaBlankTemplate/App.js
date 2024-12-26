@@ -1,110 +1,118 @@
-import { SafeAreaView, Text, TouchableOpacity } from "react-native";
-import { useEffect, useState } from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import Lab1 from "./screens/lab1";
+import Lab2 from "./screens/lab2";
+import Lab3 from "./screens/lab3";
+import * as Font from "expo-font";
+import { View, StyleSheet, ActivityIndicator, Image } from "react-native";
+import { useState, useEffect } from "react";
 
+const Tab = createBottomTabNavigator();
 export default function App() {
-  const [clicks, setClicks] = useState(0);
-  const [seconds, setSeconds] = useState(5);
-  const [result, setResult] = useState(0);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+      "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    });
+  };
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-      }
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [seconds]);
+    loadFonts().then(() => setFontsLoaded(true));
+  }, []);
 
-  if (seconds == 0) {
-    if (clicks > result) {
-      setResult(clicks);
-    }
-    setClicks(0);
-    setSeconds(5);
+  if (!fontsLoaded) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#000000",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Text
-        style={{
-          color: "white",
-          fontSize: 30,
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={{
+          headerTitleAlign: "center",
+          headerTitleStyle: styles.headerTitle,
+          tabBarLabelStyle: styles.tabBarLabelStyle,
+          tabBarStyle: styles.tabBar,
         }}
       >
-        Click per second test
-      </Text>
-      <Text
-        style={{
-          color: "white",
-          marginTop: 30,
-          fontSize: 20,
-        }}
-      >
-        Best result: {result} clicks
-      </Text>
-      <Text
-        style={{
-          color: "white",
-          marginTop: 30,
-          fontSize: 20,
-        }}
-      >
-        Remaining time: {seconds} seconds
-      </Text>
-      <TouchableOpacity
-        onPress={() => {
-          setSeconds(5);
-        }}
-        style={{
-          backgroundColor: "white",
-          padding: 10,
-          borderRadius: 10,
-          marginTop: 30,
-        }}
-      >
-        <Text
-          style={{
-            color: "black",
+        <Tab.Screen
+          name="Lab1"
+          component={Lab1}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={require("./assets/icons/lab1.png")}
+                style={[
+                  styles.icon,
+                  { tintColor: focused ? "#007AFF" : "#777777" },
+                ]}
+              />
+            ),
           }}
-        >
-          Restart timer
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          setClicks(clicks + 1);
-        }}
-        style={{
-          backgroundColor: "white",
-          padding: 100,
-          borderRadius: 120,
-          marginTop: 30,
-        }}
-      >
-        <Text
-          style={{
-            color: "black",
+        />
+        <Tab.Screen
+          name="Lab2"
+          component={Lab2}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={require("./assets/icons/lab2.png")}
+                style={[
+                  styles.icon,
+                  { tintColor: focused ? "#007AFF" : "#777777" },
+                ]}
+              />
+            ),
           }}
-        >
-          Click!
-        </Text>
-      </TouchableOpacity>
-      <Text
-        style={{
-          color: "white",
-          marginTop: 30,
-          fontSize: 20,
-        }}
-      >
-        Clicks: {clicks}
-      </Text>
-    </SafeAreaView>
+        />
+        <Tab.Screen
+          name="Lab3"
+          component={Lab3}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={require("./assets/icons/lab3.png")}
+                style={[
+                  styles.icon,
+                  { tintColor: focused ? "#007AFF" : "#777777" },
+                ]}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontFamily: "Roboto-Medium",
+    color: "#252525",
+  },
+  icon: {
+    width: 28,
+    height: 28,
+    marginBottom: 6,
+  },
+  tabBarLabel: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 10,
+  },
+  tabBar: {
+    height: 60,
+    paddingTop: 6,
+    paddingBottom: 6,
+  },
+});
