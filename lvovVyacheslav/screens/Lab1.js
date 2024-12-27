@@ -1,14 +1,9 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
+import { useClicksStore } from '../stores/stores';
 
 const Lab1 = () => {
-  // Локальное состояние для хранения количества нажатий
-  const [clicks, setClicks] = useState(0);
-
-  // Функция для увеличения счетчика
-  const incrementClicks = () => {
-    setClicks(clicks + 1);
-  };
+  const { clicks, incrementClicks } = useClicksStore();
 
   return (
     <View style={styles.container}>
