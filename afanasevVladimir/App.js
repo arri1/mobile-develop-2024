@@ -1,12 +1,16 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+import React from "react";
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StyleSheet, View } from 'react-native';
+
+import Lab1 from "./layouts/lab1";
 
 const Tab = createBottomTabNavigator();
 
-import Lab1 from "./layouts/lab1";
 import { NavigationContainer } from "@react-navigation/native";
-const colors = ["black", "red", "yellow"];
 
-export default function App() {
+const App = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator>
@@ -15,3 +19,13 @@ export default function App() {
     </NavigationContainer>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+export default App;
