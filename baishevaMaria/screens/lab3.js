@@ -1,10 +1,13 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { StyleSheet, Text, TextInput, View, FlatList, Button } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleTheme } from '../store/store';
 
 export default function Lab3() {
   const [searchTerm, setSearchTerm] = useState("");
   const [key, setKey] = useState(0);
   const [useMemoFilter, setUseMemoFilter] = useState(true);
+  const theme = useSelector(state => state.global.theme);
 
   const leng = 100000000;
 
@@ -53,28 +56,31 @@ export default function Lab3() {
     setSearchTerm("");
   };
 
+  const toggleThemeHandler = () => {
+    dispatch(toggleTheme()); // Переключаем тему
+  };
+
+  const appStyles = theme === 'light' ? styles.lightTheme : styles.darkTheme;
+
   return (
-    <View style={styles.container} key={key}>
-      <Text style={styles.title}>Фильтрация списка имен</Text>
+    <View style={[styles.container, appStyles]}>
+      <Text style={[styles.title, appStyles]}>Фильтрация списка имен</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, appStyles]}
         placeholder="Искать имя..."
+        placeholderTextColor={theme === 'light' ? '#000' : '#aaa'}
         value={searchTerm}
         onChangeText={(text) => setSearchTerm(text)}
       />
-
       <Button 
-        title={useMemoFilter ? "Использовать без useMemo" : "Использовать с useMemo"}
+        title={useMemoFilter ? "Использовать без useMemo" : "Использовать с useMemo"} 
         onPress={() => setUseMemoFilter(!useMemoFilter)} 
       />
-
       <Button title="Очистить экран" onPress={forceRerender} />
-
-      <Text>Отфильтрованные имена:</Text>
       <FlatList
         data={filteredNames}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <Text style={styles.name}>{item}</Text>}
+        renderItem={({ item }) => <Text style={[styles.name, appStyles]}>{item}</Text>}
       />
     </View>
   );
@@ -83,24 +89,31 @@ export default function Lab3() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 24,  // Возвращаем прежний размер для заголовка
     marginBottom: 20,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
     width: '100%',
+    fontSize: 18,  // Возвращаем прежний размер для текста в input
   },
   name: {
-    fontSize: 18,
+    fontSize: 18,  // Возвращаем прежний размер для списка имен
     marginBottom: 10,
+  },
+  lightTheme: {
+    backgroundColor: '#ffffff',
+    color: '#000000',
+  },
+  darkTheme: {
+    backgroundColor: '#333333',
+    color: '#ffffff',
   },
 });
