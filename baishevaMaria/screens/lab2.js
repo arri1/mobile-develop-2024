@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { setRandomCountry } from '../store/store';
+import { setRandomCountry, toggleTheme } from '../store/store';
 
 export default function Lab2() {
   const [loading, setLoading] = useState(false);
-  const randomCountry = useSelector(state => state.global.randomCountry);
+  const randomCountry = useSelector((state) => state.global.randomCountry);
+  const theme = useSelector((state) => state.global.theme); // Получаем текущую тему
   const dispatch = useDispatch();
 
   const fetchRandomCountry = async () => {
@@ -23,16 +24,20 @@ export default function Lab2() {
     }
   };
 
+  const toggleThemeHandler = () => {
+    dispatch(toggleTheme()); // Переключаем тему
+  };
+
+  const appStyles = theme === 'light' ? styles.lightTheme : styles.darkTheme;
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Страна:</Text>
-
+    <View style={[styles.container, appStyles]}>
+      <Text style={[styles.title, appStyles]}>Страна:</Text>
       {loading ? (
-        <ActivityIndicator size="large" color="#00ff00" />
+        <ActivityIndicator size="large" color={theme === 'light' ? '#000' : '#fff'} />
       ) : (
-        <Text style={styles.countryName}>{randomCountry}</Text>
+        <Text style={[styles.countryName, appStyles]}>{randomCountry}</Text>
       )}
-
       <Button title="START" onPress={fetchRandomCountry} />
     </View>
   );
@@ -43,15 +48,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 18,
+    fontSize: 24,  // Возвращаем прежний размер для заголовка
     fontWeight: 'bold',
     marginBottom: 10,
   },
   countryName: {
-    fontSize: 24,
+    fontSize: 30,  // Возвращаем прежний размер для названия страны
     marginVertical: 20,
+  },
+  lightTheme: {
+    backgroundColor: '#ffffff',
+    color: '#000000',
+  },
+  darkTheme: {
+    backgroundColor: '#333333',
+    color: '#ffffff',
   },
 });
