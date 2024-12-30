@@ -13,19 +13,38 @@ const Lab1 = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.container,{backgroundColor: isDarkTheme ? "#404040" : "#D9D9D9",}]}>
-      <Text style={[styles.title, {color: isDarkTheme ? "#ffffff" : "#000000",}]}>Фигура</Text>
+    <SafeAreaView
+      style={[
+        styles.container,
+        { backgroundColor: isDarkTheme ? "#404040" : "#D9D9D9" },
+      ]}
+    >
+      <Text
+        style={[styles.title, { color: isDarkTheme ? "#ffffff" : "#000000" }]}
+      >
+        Фигура
+      </Text>
 
-      <View style={[styles.figure, { backgroundColor: figureColor}]} />
+      <View style={[styles.figure, { backgroundColor: figureColor }]} />
 
-      <TouchableOpacity 
+      <TouchableOpacity
         onPress={() => {
           const randomNumber = getRandomNumber(colors.length - 1);
-          setFigureColor(colors[randomNumber]); 
+          setFigureColor(colors[randomNumber]);
         }}
-        style={[styles.button, {backgroundColor: isDarkTheme ? "#1C1B1B" : "#68C5FF",}]}
+        style={[
+          styles.button,
+          { backgroundColor: isDarkTheme ? "#1C1B1B" : "#68C5FF" },
+        ]}
       >
-        <Text style={[styles.buttonText, {color: isDarkTheme ? "#ffffff" : "#000000",}]}>Поменять цвет фигуры</Text>
+        <Text
+          style={[
+            styles.buttonText,
+            { color: isDarkTheme ? "#ffffff" : "#000000" },
+          ]}
+        >
+          Поменять цвет фигуры
+        </Text>
       </TouchableOpacity>
 
       <View style={[styles.navigation]}>

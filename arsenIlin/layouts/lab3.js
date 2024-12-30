@@ -12,7 +12,9 @@ const ThemeToggle = () => {
         { backgroundColor: isDarkTheme ? "#404040" : "#D9D9D9" },
       ]}
     >
-      <Text style={{ color: isDarkTheme ? "white" : "black", marginBottom: 20 }}>
+      <Text
+        style={{ color: isDarkTheme ? "white" : "black", marginBottom: 20 }}
+      >
         {isDarkTheme ? "Темная тема" : "Светлая тема"}
       </Text>
       <TouchableOpacity
@@ -22,7 +24,12 @@ const ThemeToggle = () => {
         ]}
         onPress={toggleTheme}
       >
-        <Text style={[styles.buttonText, { color: isDarkTheme ? "#FFFFFF" : "#000000" }]}>
+        <Text
+          style={[
+            styles.buttonText,
+            { color: isDarkTheme ? "#FFFFFF" : "#000000" },
+          ]}
+        >
           Переключить тему
         </Text>
       </TouchableOpacity>

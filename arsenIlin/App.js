@@ -6,6 +6,7 @@ import Lab1 from "./layouts/lab1";
 import Lab2 from "./layouts/lab2";
 import Lab3 from "./layouts/lab3";
 import Lab4 from "./layouts/lab4";
+import Lab5 from "./layouts/lab5";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 
 const Tab = createBottomTabNavigator();
@@ -14,8 +15,21 @@ const TabButton = ({ title, onPress }) => {
   const { isDarkTheme } = useTheme();
   return (
     <View style={styles.tabButtonContainer}>
-      <TouchableOpacity onPress={onPress} style={[styles.tabButton,{backgroundColor: isDarkTheme ? "#1C1B1B" : "#ffffff",}]}>
-        <Text style={[styles.tabButtonText,{color: isDarkTheme ? "#ffffff" : "#000000",}]}>{title}</Text>
+      <TouchableOpacity
+        onPress={onPress}
+        style={[
+          styles.tabButton,
+          { backgroundColor: isDarkTheme ? "#1C1B1B" : "#ffffff" },
+        ]}
+      >
+        <Text
+          style={[
+            styles.tabButtonText,
+            { color: isDarkTheme ? "#ffffff" : "#000000" },
+          ]}
+        >
+          {title}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -47,6 +61,7 @@ const AppTabs = () => {
       <Tab.Screen name="Lab2" component={Lab2} />
       <Tab.Screen name="Lab3" component={Lab3} />
       <Tab.Screen name="Lab4" component={Lab4} />
+      <Tab.Screen name="Lab5" component={Lab5} />
     </Tab.Navigator>
   );
 };
@@ -75,7 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 30, // Полностью круглые кнопки
     alignItems: "center",
     justifyContent: "center",
-    
+
     shadowOffset: {
       width: 0,
       height: 2,

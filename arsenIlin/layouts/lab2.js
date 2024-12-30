@@ -42,8 +42,17 @@ const Lab2 = () => {
   }, [weatherData]);
 
   return (
-    <SafeAreaView style={[styles.container, {backgroundColor: isDarkTheme ? "#404040" : "#D9D9D9"}]}>
-      <Text style={[styles.title, {color: isDarkTheme ? "#ffffff" : "#000000",}]}>Погода</Text>
+    <SafeAreaView
+      style={[
+        styles.container,
+        { backgroundColor: isDarkTheme ? "#404040" : "#D9D9D9" },
+      ]}
+    >
+      <Text
+        style={[styles.title, { color: isDarkTheme ? "#ffffff" : "#000000" }]}
+      >
+        Погода
+      </Text>
       <TextInput
         style={styles.input}
         placeholder="Введите название города"
@@ -51,10 +60,29 @@ const Lab2 = () => {
         value={city}
         onChangeText={setCity}
       />
-      <View style={[styles.card, {backgroundColor: isDarkTheme ? "#1C1B1B" : "#68C5FF"}]}>
-        <Text style={[styles.cardInfo, {color: isDarkTheme ? "#ffffff" : "#000000"}]}>{weatherMessage.info}</Text>
+      <View
+        style={[
+          styles.card,
+          { backgroundColor: isDarkTheme ? "#1C1B1B" : "#68C5FF" },
+        ]}
+      >
+        <Text
+          style={[
+            styles.cardInfo,
+            { color: isDarkTheme ? "#ffffff" : "#000000" },
+          ]}
+        >
+          {weatherMessage.info}
+        </Text>
         <Text style={styles.separator}>:</Text>
-        <Text style={[styles.cardTest,{color: isDarkTheme ? "#ffffff" : "#000000"}]}>{weatherMessage.test}</Text>
+        <Text
+          style={[
+            styles.cardTest,
+            { color: isDarkTheme ? "#ffffff" : "#000000" },
+          ]}
+        >
+          {weatherMessage.test}
+        </Text>
       </View>
     </SafeAreaView>
   );
