@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 const MyPage = () => {
   const [name, setName] = useState('');
   const [greeting, setGreeting] = useState('');
+
+  // Используем useEffect для отслеживания изменений имени
+  useEffect(() => {
+    console.log(`Имя изменено на: ${name}`);
+  }, [name]);
+
+  // Используем useEffect для действия при загрузке компонента
+  useEffect(() => {
+    console.log('Компонент MyPage загружен');
+    return () => {
+      console.log('Компонент MyPage будет размонтирован');
+    };
+  }, []);
 
   const handlePress = () => {
     setGreeting(`Привет, ${name}!`);
@@ -41,9 +54,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     paddingHorizontal: 8,
-    marginBottom: 16,
-    width: '100%',
-    borderRadius: 4,
+    marginBottom: 16, 
   },
   greeting: {
     marginTop: 16,
