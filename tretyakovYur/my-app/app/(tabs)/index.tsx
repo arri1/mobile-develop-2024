@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 const MyPage = () => {
   const [name, setName] = useState('');
-  const [greeting, setGreeting] = useState('');
+  const [isGreetingVisible, setIsGreetingVisible] = useState(false);
 
   // Используем useEffect для отслеживания изменений имени
   useEffect(() => {
@@ -18,8 +18,14 @@ const MyPage = () => {
     };
   }, []);
 
+  // Мемоизируем приветствие, чтобы пересчитывать только при изменении `name`
+  const greeting = useMemo(() => {
+    console.log('Приветствие обновлено');
+    return name ? `Привет, ${name}!` : '';
+  }, [name]);
+
   const handlePress = () => {
-    setGreeting(`Привет, ${name}!`);
+    setIsGreetingVisible(true);
   };
 
   return (
@@ -32,7 +38,9 @@ const MyPage = () => {
         onChangeText={setName}
       />
       <Button title="Поздороваться" onPress={handlePress} />
-      {greeting ? <Text style={styles.greeting}>{greeting}</Text> : null}
+      {isGreetingVisible && greeting ? (
+        <Text style={styles.greeting}>{greeting}</Text>
+      ) : null}
     </View>
   );
 };
@@ -54,7 +62,9 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     paddingHorizontal: 8,
-    marginBottom: 16, 
+    marginBottom: 16,
+    width: '100%',
+    borderRadius: 4,
   },
   greeting: {
     marginTop: 16,
