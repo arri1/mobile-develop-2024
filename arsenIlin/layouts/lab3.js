@@ -18,7 +18,7 @@ const ThemeToggle = () => {
       <TouchableOpacity
         style={[
           styles.button,
-          { backgroundColor: isDarkTheme ? "#000000" : "#FFFFFF" },
+          { backgroundColor: isDarkTheme ? "#000000" : "#68C5FF" },
         ]}
         onPress={toggleTheme}
       >

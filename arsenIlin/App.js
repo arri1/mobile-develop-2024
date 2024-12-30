@@ -14,8 +14,8 @@ const TabButton = ({ title, onPress }) => {
   const { isDarkTheme } = useTheme();
   return (
     <View style={styles.tabButtonContainer}>
-      <TouchableOpacity onPress={onPress} style={[styles.tabButton,{backgroundColor: isDarkTheme ? "#1C1B1B" : "#8C8C8C",}]}>
-        <Text style={styles.tabButtonText}>{title}</Text>
+      <TouchableOpacity onPress={onPress} style={[styles.tabButton,{backgroundColor: isDarkTheme ? "#1C1B1B" : "#ffffff",}]}>
+        <Text style={[styles.tabButtonText,{color: isDarkTheme ? "#ffffff" : "#000000",}]}>{title}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -31,7 +31,7 @@ const AppTabs = () => {
           <TabButton {...props} title={route.name.replace("Lab", "")} />
         ),
         tabBarStyle: {
-          backgroundColor: isDarkTheme ? "#2E2E2E" : "#9F9F9F",
+          backgroundColor: isDarkTheme ? "#2E2E2E" : "#68C5FF",
           height: 70,
           borderTopWidth: 0,
           padding: 10,

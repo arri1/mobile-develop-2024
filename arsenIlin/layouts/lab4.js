@@ -27,15 +27,15 @@ const Lab3 = () => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isDarkTheme ? "#404040" : "#D9D9D9" }]}>
-      <Text style={styles.title}>Загрузка картинок</Text>
+      <Text style={[styles.title, {color: isDarkTheme ? "#ffffff" : "#000000",}]}>Загрузка картинок</Text>
 
-      <View style={[styles.card,{backgroundColor: isDarkTheme ? "#1C1B1B" : "#8C8C8C"}]}>
+      <View style={[styles.card,{backgroundColor: isDarkTheme ? "#1C1B1B" : "#6FC5FF"}]}>
         <Text style={[styles.label, {color: isDarkTheme ? "#ffffff" : "#000000"}]}>Без useMemo:</Text>
         <Button title="Следующая картинка" onPress={handleChangeImageWithoutMemo} />
         <Image source={{ uri: imagesArray[indexWithoutMemo] }} style={styles.image} />
       </View>
 
-      <View style={[styles.card,{backgroundColor: isDarkTheme ? "#1C1B1B" : "#8C8C8C"}]}>
+      <View style={[styles.card,{backgroundColor: isDarkTheme ? "#1C1B1B" : "#6FC5FF"}]}>
         <Text style={[styles.label, {color: isDarkTheme ? "#ffffff" : "#000000"}]}>С useMemo:</Text>
         <Button title="Следующая картинка" onPress={handleChangeImageWithMemo} />
         <Image source={{ uri: imageWithMemo }} style={styles.image} />

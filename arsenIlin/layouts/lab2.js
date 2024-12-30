@@ -43,7 +43,7 @@ const Lab2 = () => {
 
   return (
     <SafeAreaView style={[styles.container, {backgroundColor: isDarkTheme ? "#404040" : "#D9D9D9"}]}>
-      <Text style={styles.title}>Погода</Text>
+      <Text style={[styles.title, {color: isDarkTheme ? "#ffffff" : "#000000",}]}>Погода</Text>
       <TextInput
         style={styles.input}
         placeholder="Введите название города"
@@ -51,7 +51,7 @@ const Lab2 = () => {
         value={city}
         onChangeText={setCity}
       />
-      <View style={[styles.card, {backgroundColor: isDarkTheme ? "#1C1B1B" : "#8C8C8C"}]}>
+      <View style={[styles.card, {backgroundColor: isDarkTheme ? "#1C1B1B" : "#68C5FF"}]}>
         <Text style={[styles.cardInfo, {color: isDarkTheme ? "#ffffff" : "#000000"}]}>{weatherMessage.info}</Text>
         <Text style={styles.separator}>:</Text>
         <Text style={[styles.cardTest,{color: isDarkTheme ? "#ffffff" : "#000000"}]}>{weatherMessage.test}</Text>
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
     color: "#000000",
   },
   card: {
-    width: 364,
-    height: 436,
+    width: 300,
+    height: 400,
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
