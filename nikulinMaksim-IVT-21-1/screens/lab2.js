@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 import { useTheme } from "../hooks/themeManager.js";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Lab2 = () => {
   const [fact, setFact] = useState("");
@@ -10,7 +11,7 @@ const Lab2 = () => {
   const getRandomFact = async () => {
     try {
       const response = await fetch(
-        "https://uselessfacts.jsph.pl/random.json?language=en"
+        //"https://uselessfacts.jsph.pl/random.json?language=en"
       );
       const data = await response.json();
       setFact(data.text);
@@ -27,25 +28,45 @@ const Lab2 = () => {
   const { backgroundColor, textColor, toggleThemeMode } = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: backgroundColor }]}>
-      <Text style={styles.factText}>{fact}</Text>
-      <Button title="Get useless fact!" onPress={getRandomFact} />
-      <Button title="Change Mode" onPress={toggleThemeMode} />
-    </View>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: backgroundColor }]}
+    >
+      <View style={styles.box}>
+        <Text style={styles.factText}>{fact}</Text>
+        <TouchableOpacity style={styles.button} onPress={getRandomFact}>
+          <Text style={styles.buttonText}>Get useless fact</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    padding: 20,
+  },
+  box: {
+    marginTop: "20%",
+    padding: 8,
+    borderRadius: 15,
+    backgroundColor: "#CAD6FF",
   },
   factText: {
-    fontSize: 20,
-    marginBottom: 30,
+    fontSize: 15,
+    marginBottom: 18,
     textAlign: "center",
+  },
+  button: {
+    alignItems: "center",
+    backgroundColor: "#2260FF",
+    paddingBottom: 2,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 18,
   },
 });
 
