@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Lab1 from "./screens/use-state";
 import Lab2 from "./screens/use-effect";
 import Lab3 from "./screens/use-memo";
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ThemeProvider, ThemeContext } from './ThemeContext'; // Импортируем контекст
 
 const Tab = createBottomTabNavigator();
@@ -17,10 +17,12 @@ const AppContent = () => {
       <Tab.Navigator
         screenOptions={{
           tabBarStyle: {
-            backgroundColor: isDarkTheme ? '#333' : '#fff',
+            backgroundColor: isDarkTheme ? '#1a1a1a' : '#f9f9f9',
+            borderTopWidth: 0,
           },
           headerStyle: {
-            backgroundColor: isDarkTheme ? '#333' : '#fff',
+            backgroundColor: isDarkTheme ? '#1a1a1a' : '#f9f9f9',
+            elevation: 0,
           },
           headerTintColor: isDarkTheme ? '#fff' : '#000',
         }}
@@ -30,7 +32,9 @@ const AppContent = () => {
         <Tab.Screen name="Lab3" component={Lab3} />
       </Tab.Navigator>
       <View style={styles.buttonContainer}>
-        <Button title="Toggle Theme" onPress={toggleTheme} />
+        <TouchableOpacity style={styles.button} onPress={toggleTheme}>
+          <Text style={styles.buttonText}>{isDarkTheme ? 'Light Mode' : 'Dark Mode'}</Text>
+        </TouchableOpacity>
       </View>
     </NavigationContainer>
   );
@@ -47,8 +51,21 @@ export default function App() {
 const styles = StyleSheet.create({
   buttonContainer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 40,
     left: '50%',
     transform: [{ translateX: -50 }],
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  button: {
+    backgroundColor: '#007bff',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
