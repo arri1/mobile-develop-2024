@@ -1,113 +1,180 @@
-import React, { useEffect, useState, useMemo, useCallback, useContext } from "react";
-import { View, Text, ActivityIndicator, FlatList, StyleSheet } from "react-native";
-import { ThemeContext } from '../ThemeContext'; // Импортируем контекст
+import React, { useEffect, useState, useMemo, useCallback, useContext} from "react";
+import { View, Text, ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { ThemeContext } from '../ThemeContext';
 
 const Lab3 = () => {
-    const { isDarkTheme } = useContext(ThemeContext); // Используем контекст
+    const { isDarkTheme } = useContext(ThemeContext);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [useMemoEnabled, setUseMemoEnabled] = useState(true);
+    const [timerEnabled, setTimerEnabled] = useState(true);
+    const [fetchTime, setFetchTime] = useState(null);
+    const [memoTime, setMemoTime] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "https://api.coindesk.com/v1/bpi/currentprice.json"
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        const startTime = timerEnabled ? performance.now() : null; 
+
+        try {
+            const response = await fetch(
+                "https://api.coindesk.com/v1/bpi/currentprice.json"
+            );
+            if (!response.ok) {
+                throw new Error(`Network response was not ok, status: ${response.status}`);
+            }
+            const result = await response.json();
+            setData(result);
+            setError(null);
+            if(timerEnabled && startTime){
+                const endTime = performance.now();
+                setFetchTime(endTime - startTime); 
+             }
+        } catch (err) {
+            setError(err);
+            setData(null);
+            setFetchTime(null);
+        } finally {
+            setLoading(false);
         }
-        const result = await response.json();
-        setData(result);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    }, [timerEnabled]);
 
-    fetchData();
-  }, []);
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
-  const processedData = useMemo(() => {
-    if (!data) return null; 
-    return {
-      updated: data.time.updated,
-      rates: data.bpi,
-    };
-  }, [data]);
-
-  if (loading)
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#00ff00" />
-      </View>
-    );
-  if (error)
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Error: {error.message}</Text>
-      </View>
-    );
-
-    return (
+    const processedData = useMemo(() => {
+         const startTime = timerEnabled ? performance.now() : null; 
+        let result;
+        if (!data || !useMemoEnabled) {
+          let processed = data ? { updated: data?.time?.updated, rates: data?.bpi } : null
+            if(processed) {
+               for(let i = 0; i<10000; i++){
+                   let _ = Math.random()
+               }
+            }
+           result = processed
+        } else {
+            result = {
+                updated: data.time?.updated,
+                rates: data.bpi,
+            };
+        }
+          if(timerEnabled && startTime){
+                const endTime = performance.now();                
+                setMemoTime(endTime - startTime);  
+              }
+        return result;
+     }, [data, useMemoEnabled, timerEnabled]); 
+ 
+ 
+     const toggleUseMemo = () => {
+         setUseMemoEnabled(!useMemoEnabled);
+     };
+      const toggleTimer = () => {
+         setTimerEnabled(!timerEnabled);
+     };
+ 
+ 
+     if (loading)
+         return (
+             <View style={styles.loaderContainer}>
+                 <ActivityIndicator size="large" color="#00ff00" />
+             </View>
+         );
+     if (error)
+         return (
+             <View style={styles.errorContainer}>
+                 <Text style={styles.errorText}>Error: {error?.message}</Text>
+             </View>
+         );
+ 
+     if (!processedData) {
+         return (<View style={styles.container}>
+             <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#000' }]}>
+                 Lab 2
+             </Text>
+             <Text
+                 style={[
+                     styles.subtitle,
+                     { color: isDarkTheme ? '#fff' : '#666' },
+                 ]}
+             >Loading data...
+             </Text>
+         </View>);
+ 
+     }
+ 
+ 
+     return (
         <View style={[styles.container, { backgroundColor: isDarkTheme ? '#121212' : '#f0f0f0' }]}>
-            <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#333' }]}>Lab 3</Text>
-      <Text
-        style={[
-          styles.subtitle,
-          { color: isDarkTheme ? "#ccc" : "#666" },
-        ]}
-      >
-        Current Bitcoin Prices
-      </Text>
-      <Text
-        style={[
-          styles.updatedText,
-          { color: isDarkTheme ? "#fff" : "#000" },
-        ]}
-      >
-        Last updated: {processedData.updated}
-      </Text>
-      <FlatList
-        data={Object.entries(processedData.rates)}
-        keyExtractor={([currency]) => currency}
-        renderItem={({ item }) => {
-          const [currency, info] = item;
-          return (
-            <View
-              style={[
-                styles.rateContainer,
-                {
-                  backgroundColor: isDarkTheme ? "#555" : "#e0e0e0",
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.rateText,
-                  { color: isDarkTheme ? "#fff" : "#000" },
-                ]}
-              >
-                {info.code}: {info.rate}
+                        <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#333' }]}>
+                 Lab 3
+             </Text>
+             <Text
+                 style={[
+                     styles.subtitle,
+                     { color: "#666" },
+                 ]}
+             >
+                 Current Bitcoin Prices
+             </Text>
+             <Text
+                 style={[styles.updatedText, { color: isDarkTheme ? '#fff' : '#333' }]}
+             >
+                 Last updated: {processedData?.updated}
+             </Text>
+              {timerEnabled && (
+                 <Text style={[styles.timerText, { color: isDarkTheme ? '#fff' : '#000' }]}>
+                      Fetch Time: {fetchTime !== null ? `${fetchTime.toFixed(2)} ms` : 'Loading...'}
+                 </Text>
+              )}
+              {timerEnabled && (
+                  <Text style={[styles.timerText, { color: isDarkTheme ? '#fff' : '#000' }]}>
+                  Memo Time (UseMemo {useMemoEnabled ? "On" : "Off"}): {memoTime !== null ? `${memoTime.toFixed(2)} ms` : 'Loading...'}
               </Text>
-            </View>
-          );
-        }}
-      />
+          )}
+          <View style={styles.buttonsContainer}>
+              <TouchableOpacity style={styles.button} onPress={fetchData}>
+                  <Text style={styles.buttonText}>Обновить</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={toggleUseMemo}>
+                  <Text style={styles.buttonText}>
+                      {useMemoEnabled ? "Выключить useMemo" : "Включить useMemo"}
+                  </Text>
+              </TouchableOpacity>
+          </View>
+          <FlatList
+              data={Object.entries(processedData.rates)}
+              keyExtractor={([currency]) => currency}
+              renderItem={({ item }) => {
+                  const [currency, info] = item;
+                  return (
+                      <View
+                          style={[
+                              styles.rateContainer,{
+                                backgroundColor: "#e0e0e0",
+                            },
+                        ]}
+                    >
+                        <Text
+                            style={[
+                                styles.rateText,
+                                { color: "#000" },
+                            ]}
+                        >
+                            {info.code}: {info.rate}
+                        </Text>
+                    </View>
+                );
+            }}
+        />
     </View>
-  );
+);
 };
+
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
 loaderContainer: {
     flex: 1,
     justifyContent: "center",
