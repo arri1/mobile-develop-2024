@@ -1,10 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 const CounterNumber = () => {
   const [counter, setCounter] = useState(0);
+  const [fontLoaded] = useFonts({
+    "Monts": require("../assets/fonts/Montserrat-Medium.ttf"),
+  });
+useEffect(()=>{
+  async function prepare(){
+    await SplashScreen.preventAutoHideAsync();
+  }
+  prepare();
+},[]);
+  if (!fontLoaded) {
+    return undefined;
+  }else{
+    SplashScreen.hideAsync();
+  }
   return (
-    <View>
+    <View style={styles.main}>
       <Text style={styles.number}>{counter}</Text>
       <View style={styles.buttonGroup}>
         <TouchableOpacity
@@ -36,33 +52,45 @@ const CounterNumber = () => {
   );
 };
 const styles = StyleSheet.create({
-  buttonGroup: {
-    width: "100%",
-    display: "flex",
+  main: {
+    backgroundColor: "#606C38",
     alignItems: "center",
+    flex: 1,
   },
-
+  buttonGroup: {
+    flexDirection: "row",
+    gap: 18,
+  },
   number: {
+    fontFamily: "Monts",
+    marginTop: 111,
     fontSize: 50,
-    textAlign: "center",
-    width: "100%",
-    padding: 20,
-    marginBottom: 10,
+    fontweight: 500,
+    fontsize: 45,
+    lineHeight: 53,
+    color: "#FEFAE0",
   },
   commonButton: {
-    alignItems: "center",
+    marginTop: 97,
     justifyContent: "center",
-    marginVertical: 20,
     borderRadius: 4,
-    backgroundColor: "black",
-    width: 200,
-    height: 80,
+    width: 80,
+    height: 43,
+    backgroundColor: "#283618",
+  },
+  text: {
+    fontFamily: "Monts",
+    marginTop: 28,
+    fontStyle: "normal",
+    fontSize: 25,
+    color: "#FEFAE0",
   },
   commonText: {
-    fontSize: 25,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: "white",
+    fontFamily: "Monts",
+    fontStyle: "normal",
+    fontSize: 14,
+    textAlign: "center",
+    color: "#FEFAE0",
   },
 });
 
