@@ -8,28 +8,26 @@ const SecondScreen = () => {
   const number = 50;
   useEffect(() => {
     if (counter > number) {
-      setWord("число меньше");
-    } 
-    else if (counter < number) {
-      setWord("число больше");
-    } 
-    else setWord("Вы угадали");
+      setWord("Число меньше");
+    } else if (counter < number) {
+      setWord("Число больше");
+    } else setWord("Вы угадали");
   }, [check]);
 
   return (
     <View>
       <Text style={styles.number}>{counter}</Text>
       <Text style={styles.text}>{word}</Text>
-      
+
       <View style={styles.buttonGroup}>
-      <TouchableOpacity
-          style={styles.commonButton}
-          onPress={() => {
-            setChek(check+1);
-          }}
-        >
-          <Text style={styles.commonText}>Проверить</Text>
-        </TouchableOpacity>
+      <TouchableOpacity 
+        style={styles.commonButton}
+        onPress={() => {
+          setChek(check + 1);
+        }}
+      >
+        <Text style={styles.commonText}>Проверить</Text>
+      </TouchableOpacity>
         <TouchableOpacity
           style={styles.commonButton}
           onPress={() => {
@@ -61,9 +59,6 @@ const SecondScreen = () => {
       </View>
     </View>
   );
-};
-const random = () => {
-  return Math.floor(Math.floor(Math.random() * 100) / 10) * 10;
 };
 
 const styles = StyleSheet.create({
