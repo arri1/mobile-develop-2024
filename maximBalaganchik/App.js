@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import Lab1 from "./screens/use-state";
 import Lab2 from "./screens/use-effect";
+import Lab3 from "./screens/use-memo";
 import { View, Text, Button, StyleSheet } from 'react-native';
 
 const Tab = createBottomTabNavigator();
@@ -13,6 +14,7 @@ export default function App() {
             <Tab.Navigator>
                 <Tab.Screen name="Lab1" component={Lab1} />
                 <Tab.Screen name="Lab2" component={Lab2} />
+                <Tab.Screen name="Lab3" component={Lab3} />
             </Tab.Navigator>
         </NavigationContainer>
     );
