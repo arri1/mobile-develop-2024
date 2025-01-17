@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 
 const App = () => {
-  // Инициализация состояния с помощью useState
   const [count, setCount] = useState(0);
 
-  // Функция для увеличения счетчика
   const increment = () => {
     setCount(count + 1);
   };
