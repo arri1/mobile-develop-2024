@@ -4,8 +4,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import lab1 from "./lab1";
 import lab2 from "./lab2";
+import lab3 from "./lab3";
 import first from "../assets/first.png";
 import second from "../assets/second.png";
+import third from "../assets/third.png";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +29,15 @@ const TabNavigator = () => {
             tabBarIcon: ({ color, size }) => <Image source={second} />,
           }}
         />
+        <Tab.Screen
+          name="lab3"
+          component={lab3}
+          options={{
+            tabBarIcon: ({ color, size }) => <Image source={third} />,
+          }}
+        />
       </Tab.Navigator>
+      
     </NavigationContainer>
   );
 };
