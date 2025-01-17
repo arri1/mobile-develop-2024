@@ -38,10 +38,9 @@ const AppContent = () => {
 
 export default function App() {
   return (
-    <NavigationContainer>
-        <Tab.Navigator>
-        </Tab.Navigator>
-      </NavigationContainer>
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 
