@@ -88,5 +88,6 @@ const styles = StyleSheet.create({
   },
 });
 
+
 export default Lab2;
 
