@@ -5,17 +5,33 @@ import Lab1 from "./screens/use-state";
 import Lab2 from "./screens/use-effect";
 import Lab3 from "./screens/use-memo";
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { ThemeProvider, ThemeContext } from './ThemeContext'; // Импортируем контекст
+import { ThemeProvider, ThemeContext } from './ThemeContext';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
 const AppContent = () => {
-  const { isDarkTheme, toggleTheme } = useContext(ThemeContext); // Используем контекст
+  const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
 
   return (
     <NavigationContainer>
       <Tab.Navigator
-        screenOptions={{
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Lab1') {
+              iconName = focused ? 'flask' : 'flask-outline';
+            } else if (route.name === 'Lab2') {
+              iconName = focused ? 'stats-chart' : 'stats-chart-outline';
+            } else if (route.name === 'Lab3') {
+              iconName = focused ? 'happy' : 'happy-outline';
+            } else if (route.name === 'Lab4') {
+              iconName = focused ? 'moon' : 'moon-outline';
+            }
+
+            return <Icon name={iconName} size={size} color={color} />;
+          },
           tabBarStyle: {
             backgroundColor: isDarkTheme ? '#1a1a1a' : '#f9f9f9',
             borderTopWidth: 0,
@@ -25,7 +41,7 @@ const AppContent = () => {
             elevation: 0,
           },
           headerTintColor: isDarkTheme ? '#fff' : '#000',
-        }}
+        })}
       >
         <Tab.Screen name="Lab1" component={Lab1} />
         <Tab.Screen name="Lab2" component={Lab2} />
@@ -51,11 +67,10 @@ export default function App() {
 const styles = StyleSheet.create({
   buttonContainer: {
     position: 'absolute',
-    bottom: 40,
-    left: '50%',
-    transform: [{ translateX: -50 }],
+    top: 40,
+    right: '5',
     borderRadius: 5,
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   button: {
     backgroundColor: '#007bff',
