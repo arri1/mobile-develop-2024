@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext  } from 'react';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { ThemeContext } from '../ThemeContext';
 
-const App = () => {
+const Lab2 = () => {
+  const { isDarkTheme } = useContext(ThemeContext);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,18 +33,21 @@ const App = () => {
   }
 
   if (error) {
-    return <Text style={styles.error}>{error}</Text>;
+    return <Text style={[styles.item,{color: isDarkTheme ? "#121212":"#f0f0f0"}]}>{error}</Text>;
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.item,{backgroundColor: isDarkTheme ? "#121212":"#f0f0f0"}]}>
+
       <FlatList
         data={users}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text style={styles.name}>{item.name}</Text>
-            <Text>{item.email}</Text>
+
+          <View style={[styles.item,{backgroundColor: isDarkTheme ? "#121212":"#f0f0f0"}]}>
+            <Text style={[styles.item,{color: isDarkTheme ? "#f0f0f0":"#121212"}]}>{item.name}</Text>
+            <Text style={[{color: isDarkTheme ? "#f0f0f0":"#121212"}]}>{item.email}</Text>
+
           </View>
         )}
       />
@@ -51,6 +56,17 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
+
+    container: {
+        flex: 1,
+        padding: 20,
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+
   container: {
     flex: 1,
     padding: 20,
@@ -72,4 +88,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Lab2;
+
