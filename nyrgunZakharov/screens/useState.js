@@ -1,4 +1,3 @@
-
 import React, { useState, useContext } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { ThemeContext } from '../ThemeContext';
