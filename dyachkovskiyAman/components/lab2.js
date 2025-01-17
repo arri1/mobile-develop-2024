@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, ActivityIndicator} from "react-native";
 import React, { useState, useEffect } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -8,6 +8,26 @@ const SecondScreen = () => {
   const [check, setChek] = useState(0);
   const [word, setWord] = useState("");
   const number = 50;
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+            const result = await response.json();
+            setData(result);
+        } catch (err) {
+            setError('Не удалось загрузить данные'); 
+        } finally {
+            setLoading(false); 
+        }
+    };
+
+    fetchData();
+}, []);
+
   useEffect(() => {
     if (counter > number) {
       setWord("Число меньше");
@@ -71,6 +91,18 @@ const SecondScreen = () => {
       >
         <Text style={styles.commonText}>Проверить</Text>
       </TouchableOpacity>
+      <View style={styles.container}>
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.item}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text>{item.body}</Text>
+            </View>
+          )}
+            />
+        </View>
     </View>
   );
 };
@@ -126,6 +158,29 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
     color: "#FEFAE0",
+  },
+  center: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    error: {
+        color: 'red',
+        fontSize: 18,
+    },
+    item: {
+        marginBottom: 16,
+        padding: 16,
+        backgroundColor: '#f9f9f9',
+        borderRadius: 8,
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    container: {
+      flex: 1,
+      padding: 16,
   },
 });
 

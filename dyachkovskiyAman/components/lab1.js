@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import { useSelector, useDispatch } from "react-redux";
+import { decrement, increment, toZero } from "./redux/reducer";
 
 const CounterNumber = () => {
-  const [counter, setCounter] = useState(0);
+  const dispatch = useDispatch();
+  const counter = useSelector((counter) => counter.counter.counter);
   const [fontLoaded] = useFonts({
     "Monts": require("../assets/fonts/Montserrat-Medium.ttf"),
   });
@@ -22,32 +25,26 @@ useEffect(()=>{
   return (
     <View style={styles.main}>
       <Text style={styles.number}>{counter}</Text>
-      <View style={styles.buttonGroup}>
-        <TouchableOpacity
-          style={styles.commonButton}
-          onPress={() => {
-            setCounter(counter + 10);
-          }}
-        >
-          <Text style={styles.commonText}>+10</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.commonButton}
-          onPress={() => {
-            setCounter(0);
-          }}
-        >
-          <Text style={styles.commonText}>Очистить</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.commonButton}
-          onPress={() => {
-            setCounter(counter - 10);
-          }}
-        >
-          <Text style={styles.commonText}>-10</Text>
-        </TouchableOpacity>
-      </View>
+            <View style={styles.buttonGroup}>
+              <TouchableOpacity
+                style={styles.commonButton}
+                onPress={() => dispatch(increment())}
+              >
+                <Text style={styles.commonText}>+10</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.commonButton}
+                onPress={() => dispatch(toZero())}
+              >
+                <Text style={styles.commonText}>Очистить</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.commonButton}
+                onPress={() => dispatch(decrement())}
+              >
+                <Text style={styles.commonText}>-10</Text>
+              </TouchableOpacity>
+            </View>
     </View>
   );
 };
