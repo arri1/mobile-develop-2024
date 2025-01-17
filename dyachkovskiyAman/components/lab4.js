@@ -1,14 +1,30 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { useSelector, useDispatch } from "react-redux";
 import { decrement, increment } from "./redux/reducer";
 
 const FourthScreen = () => {
   const dispatch = useDispatch();
   const counter = useSelector((counter) => counter.counter.counter);
+  const [fontLoaded] = useFonts({
+    Monts: require("../assets/fonts/Montserrat-Medium.ttf"),
+  });
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    prepare();
+  }, []);
+  if (!fontLoaded) {
+    return undefined;
+  } else {
+    SplashScreen.hideAsync();
+  }
 
   return (
-    <View>
+    <View style={styles.main}>
       <Text style={styles.number}>{counter}</Text>
       <View style={styles.buttonGroup}>
         <TouchableOpacity
@@ -28,42 +44,45 @@ const FourthScreen = () => {
   );
 };
 const styles = StyleSheet.create({
+  main: {
+    backgroundColor: "#606C38",
+    alignItems: "center",
+    flex: 1,
+  },
   buttonGroup: {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
+    flexDirection: "row",
+    gap: 18,
   },
-
   number: {
+    fontFamily: "Monts",
+    marginTop: 111,
     fontSize: 50,
-    textAlign: "center",
-    width: "100%",
-    padding: 10,
-    marginBottom: 5,
+    fontweight: 500,
+    fontsize: 45,
+    lineHeight: 53,
+    color: "#FEFAE0",
   },
-
-  text: {
-    fontSize: 25,
-    textAlign: "center",
-    width: "100%",
-    padding: 10,
-    marginBottom: 10,
-  },
-
   commonButton: {
-    alignItems: "center",
+    marginTop: 97,
     justifyContent: "center",
-    marginVertical: 2,
     borderRadius: 4,
-    backgroundColor: "black",
-    width: 150,
-    height: 50,
+    width: 80,
+    height: 43,
+    backgroundColor: "#283618",
+  },
+  text: {
+    fontFamily: "Monts",
+    marginTop: 28,
+    fontStyle: "normal",
+    fontSize: 25,
+    color: "#FEFAE0",
   },
   commonText: {
-    fontSize: 15,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: "white",
+    fontFamily: "Monts",
+    fontStyle: "normal",
+    fontSize: 14,
+    textAlign: "center",
+    color: "#FEFAE0",
   },
 });
 

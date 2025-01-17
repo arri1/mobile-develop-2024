@@ -1,13 +1,28 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 const ThirdScreen = () => {
   const [number, setnumber] = useState(0);
   const [number2, setnumber2] = useState(0);
   useMemo(() => expensiveSum(number2), [number2]);
-
+  const [fontLoaded] = useFonts({
+    Monts: require("../assets/fonts/Montserrat-Medium.ttf"),
+  });
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync(); 
+    }
+    prepare();
+  }, []);
+  if (!fontLoaded) {
+    return undefined;
+  } else {
+    SplashScreen.hideAsync();
+  }
   return (
-    <View>
+    <View style={styles.main}>
       <View style={styles.numberGroup}>
         <Text style={styles.number}>{number}</Text>
         <Text style={styles.number}>{number2}</Text>
@@ -34,42 +49,50 @@ const ThirdScreen = () => {
   );
 };
 const styles = StyleSheet.create({
+  main: {
+    backgroundColor: "#606C38",
+    alignItems: "center",
+    flex: 1,
+  },
   buttonGroup: {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
+    flexDirection: "row",
+    gap: 18,
   },
-
   number: {
+    fontFamily: "Monts",
+    marginTop: 111,
     fontSize: 50,
-    textAlign: "center",
-    width: "100%",
-    padding: 10,
-    marginBottom: 5,
+    fontweight: 500,
+    fontsize: 45,
+    lineHeight: 53,
+    color: "#FEFAE0",
   },
-
-  text: {
-    fontSize: 25,
-    textAlign: "center",
-    width: "100%",
-    padding: 10,
-    marginBottom: 10,
+  numberGroup: {
+    flexDirection: "row",
+    gap: 131,
+    marginTop: 111,
   },
-
   commonButton: {
-    alignItems: "center",
+    marginTop: 97,
     justifyContent: "center",
-    marginVertical: 2,
     borderRadius: 4,
-    backgroundColor: "black",
-    width: 150,
-    height: 50,
+    width: 80,
+    height: 43,
+    backgroundColor: "#283618",
+  },
+  text: {
+    fontFamily: "Monts",
+    marginTop: 28,
+    fontStyle: "normal",
+    fontSize: 25,
+    color: "#FEFAE0",
   },
   commonText: {
-    fontSize: 15,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: "white",
+    fontFamily: "Monts",
+    fontStyle: "normal",
+    fontSize: 14,
+    textAlign: "center",
+    color: "#FEFAE0",
   },
 });
 const expensiveSum = (n) => {

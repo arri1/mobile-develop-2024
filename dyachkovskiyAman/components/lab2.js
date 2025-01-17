@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 const SecondScreen = () => {
   const [counter, setCounter] = useState(0);
@@ -12,22 +14,26 @@ const SecondScreen = () => {
     } else if (counter < number) {
       setWord("Число больше");
     } else setWord("Вы угадали");
-  }, [check]);
-
+  }, [counter]);
+  const [fontLoaded] = useFonts({
+    Monts: require("../assets/fonts/Montserrat-Medium.ttf"),
+  });
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    prepare();
+  }, []);
+  if (!fontLoaded) {
+    return undefined;
+  } else {
+    SplashScreen.hideAsync();
+  }
   return (
-    <View>
+    <View style={styles.main}>
       <Text style={styles.number}>{counter}</Text>
       <Text style={styles.text}>{word}</Text>
-
       <View style={styles.buttonGroup}>
-      <TouchableOpacity 
-        style={styles.commonButton}
-        onPress={() => {
-          setChek(check + 1);
-        }}
-      >
-        <Text style={styles.commonText}>Проверить</Text>
-      </TouchableOpacity>
         <TouchableOpacity
           style={styles.commonButton}
           onPress={() => {
@@ -57,47 +63,69 @@ const SecondScreen = () => {
           <Text style={styles.commonText}>-10</Text>
         </TouchableOpacity>
       </View>
+      <TouchableOpacity
+        style={styles.checkButton}
+        onPress={() => {
+          setChek(check + 1);
+        }}
+      >
+        <Text style={styles.commonText}>Проверить</Text>
+      </TouchableOpacity>
     </View>
   );
 };
+const random = () => {
+  return Math.floor(Math.floor(Math.random() * 100) / 10) * 10;
+};
 
 const styles = StyleSheet.create({
-  buttonGroup: {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-  },
-
-  number: {
-    fontSize: 50,
-    textAlign: "center",
-    width: "100%",
-    padding:10,
-    marginBottom: 5,
-  },
-
-  text: {
-    fontSize: 25,
-    textAlign: "center",
-    width: "100%",
-    padding: 10,
-    marginBottom: 10,
-  },
-
-  commonButton: {
-    alignItems: "center",
+  checkButton: {
+    marginTop: 14,
+    width: 118,
+    height: 43,
+    backgroundColor: "#283618",
     justifyContent: "center",
-    marginVertical: 2,
     borderRadius: 4,
-    backgroundColor: "black",
-    width: 150,
-    height: 50,
+  },
+  main: {
+    backgroundColor: "#606C38",
+    alignItems: "center",
+    flex: 1,
+  },
+  buttonGroup: {
+    flexDirection: "row",
+    gap: 18,
+  },
+  number: {
+    fontFamily: "Monts",
+    marginTop: 111,
+    fontSize: 50,
+    fontweight: 500,
+    fontsize: 45,
+    lineHeight: 53,
+    color: "#FEFAE0",
+  },
+  commonButton: {
+    marginTop: 97,
+    justifyContent: "center",
+    borderRadius: 4,
+    width: 80,
+    height: 43,
+    backgroundColor: "#283618",
+  },
+  text: {
+    fontFamily: "Monts",
+    marginTop: 28,
+    fontStyle: "normal",
+    fontSize: 25,
+    color: "#FEFAE0",
   },
   commonText: {
-    fontSize: 15,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: "white",
+    fontFamily: "Monts",
+    fontStyle: "normal",
+    fontSize: 14,
+    textAlign: "center",
+    color: "#FEFAE0",
   },
 });
 

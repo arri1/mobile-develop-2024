@@ -16,7 +16,14 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveBackgroundColor: "#BC6C25",
+          tabBarInactiveBackgroundColor: "#DDA15E",
+          headerShown: false,
+          tabBarShowLabel: false,
+        }}
+      >
         <Tab.Screen
           name="lab1"
           component={lab1}
