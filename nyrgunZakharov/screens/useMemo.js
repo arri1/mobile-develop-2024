@@ -1,9 +1,11 @@
+
 import React, { useEffect, useState, useMemo, useCallback, useContext} from "react";
 import { View, Text, ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { ThemeContext } from '../ThemeContext';
 
 const Lab3 = () => {
     const { isDarkTheme } = useContext(ThemeContext);
+
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -92,13 +94,17 @@ const Lab3 = () => {
  
      if (!processedData) {
          return (<View style={styles.container}>
+
              <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#000' }]}>
+
                  Lab 2
              </Text>
              <Text
                  style={[
                      styles.subtitle,
+
                      { color: isDarkTheme ? '#fff' : '#666' },
+
                  ]}
              >Loading data...
              </Text>
@@ -108,8 +114,10 @@ const Lab3 = () => {
  
  
      return (
+
         <View style={[styles.container, { backgroundColor: isDarkTheme ? '#121212' : '#f0f0f0' }]}>
                         <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#333' }]}>
+
                  Lab 3
              </Text>
              <Text
@@ -121,17 +129,23 @@ const Lab3 = () => {
                  Current Bitcoin Prices
              </Text>
              <Text
+
                  style={[styles.updatedText, { color: isDarkTheme ? '#fff' : '#333' }]}
+
              >
                  Last updated: {processedData?.updated}
              </Text>
               {timerEnabled && (
+
                  <Text style={[styles.timerText, { color: isDarkTheme ? '#fff' : '#000' }]}>
+
                       Fetch Time: {fetchTime !== null ? `${fetchTime.toFixed(2)} ms` : 'Loading...'}
                  </Text>
               )}
               {timerEnabled && (
+
                   <Text style={[styles.timerText, { color: isDarkTheme ? '#fff' : '#000' }]}>
+
                   Memo Time (UseMemo {useMemoEnabled ? "On" : "Off"}): {memoTime !== null ? `${memoTime.toFixed(2)} ms` : 'Loading...'}
               </Text>
           )}

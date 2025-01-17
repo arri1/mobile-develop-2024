@@ -3,8 +3,10 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import { ThemeContext } from '../ThemeContext';
 
 
+
 const Lab1 = () => {
   const { isDarkTheme } = useContext(ThemeContext);
+
   const [count, setCount] = useState(0);
 
   const increment = () => {
