@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router'; // Импортируем useRouter
+import { useRouter } from 'expo-router';
 
-const IndexPage = () => {
+const Lab2Page = () => {
   const [name, setName] = useState('');
   const [greeting, setGreeting] = useState('');
-  const router = useRouter(); // Используем роутер для навигации
+  const router = useRouter();
+
+  // Используем useEffect для отслеживания изменений имени
+  useEffect(() => {
+    console.log(`Имя изменено на: ${name}`);
+  }, [name]); // Срабатывает при каждом изменении `name`
+
+  // Используем useEffect для действия при загрузке компонента
+  useEffect(() => {
+    console.log('Компонент Lab2 загружен');
+    return () => {
+      console.log('Компонент Lab2 будет размонтирован');
+    };
+  }, []); // Пустой массив зависимостей означает, что срабатывает только при монтировании/размонтировании
 
   const handlePress = () => {
     setGreeting(`Привет, ${name}!`);
@@ -22,9 +35,9 @@ const IndexPage = () => {
       />
       <Button title="Поздороваться" onPress={handlePress} />
       {greeting ? <Text style={styles.greeting}>{greeting}</Text> : null}
-
-      {/* Кнопки для перехода ко второй и третьей лабораторным */}
-      <Button title="Перейти ко 2-й лабе" onPress={() => router.push('/lab2')} />
+      
+      {/* Кнопки для перехода на другие страницы */}
+      <Button title="Вернуться на главную" onPress={() => router.push('/')} />
       <Button title="Перейти к 3-й лабе (useMemo)" onPress={() => router.push('/lab3')} />
     </View>
   );
@@ -58,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default IndexPage;
+export default Lab2Page;
