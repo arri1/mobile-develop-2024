@@ -1,33 +1,27 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { decrement, increment } from "./redux/reducer";
 
-const ThirdScreen = () => {
-  const [number, setnumber] = useState(0);
-  const [number2, setnumber2] = useState(0);
-  useMemo(() => expensiveSum(number2), [number2]);
+const FourthScreen = () => {
+  const dispatch = useDispatch();
+  const counter = useSelector((counter) => counter.counter.counter);
 
   return (
     <View>
-      <View style={styles.numberGroup}>
-        <Text style={styles.number}>{number}</Text>
-        <Text style={styles.number}>{number2}</Text>
-      </View>
+      <Text style={styles.number}>{counter}</Text>
       <View style={styles.buttonGroup}>
         <TouchableOpacity
           style={styles.commonButton}
-          onPress={() => {
-            setnumber(number + 10);
-          }}
+          onPress={() => dispatch(increment())}
         >
           <Text style={styles.commonText}>+10</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.commonButton}
-          onPress={() => {
-            setnumber2(number2 + 10);
-          }}
+          onPress={() => dispatch(decrement())}
         >
-          <Text style={styles.commonText}>+10</Text>
+          <Text style={styles.commonText}>-10</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -72,10 +66,5 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
-const expensiveSum = (n) => {
-  for (i = 0; i < 10000000; i++) {
-    n++;
-  }
-  return;
-};
-export default ThirdScreen;
+
+export default FourthScreen;
