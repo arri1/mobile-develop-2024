@@ -7,27 +7,27 @@ const FetchDataExample = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Функция для выполнения запроса к API
+
         const fetchData = async () => {
             try {
-                setLoading(true); // Показываем индикатор загрузки
-                const response = await fetch("https://jsonplaceholder.typicode.com/posts"); // Замените URL на ваш API
+                setLoading(true);
+                const response = await fetch("https://jsonplaceholder.typicode.com/posts");
                 if (!response.ok) {
                     throw new Error(`Ошибка: ${response.status}`);
                 }
                 const result = await response.json();
-                setData(result); // Сохраняем данные
+                setData(result);
             } catch (err) {
-                setError(err.message); // Обрабатываем ошибку
+                setError(err.message); 
             } finally {
-                setLoading(false); // Скрываем индикатор загрузки
+                setLoading(false);
             }
         };
 
         fetchData();
-    }, []); // Пустой массив зависимостей — эффект выполнится только при монтировании
+    }, []); 
 
-    // Отображение индикатора загрузки
+
     if (loading) {
         return (
             <View style={styles.centered}>
@@ -37,7 +37,7 @@ const FetchDataExample = () => {
         );
     }
 
-    // Отображение сообщения об ошибке
+
     if (error) {
         return (
             <View style={styles.centered}>
@@ -46,7 +46,7 @@ const FetchDataExample = () => {
         );
     }
 
-    // Отображение данных
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Список данных:</Text>
