@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router'; // Импортируем useRouter
 
 const IndexPage = () => {
   const [name, setName] = useState('');
   const [greeting, setGreeting] = useState('');
-  const router = useRouter(); // Используем роутер для навигации
 
   const handlePress = () => {
     setGreeting(`Привет, ${name}!`);
@@ -22,9 +20,6 @@ const IndexPage = () => {
       />
       <Button title="Поздороваться" onPress={handlePress} />
       {greeting ? <Text style={styles.greeting}>{greeting}</Text> : null}
-
-      {/* Кнопка для перехода ко второй лабораторной */}
-      <Button title="Перейти ко 2-й лабе" onPress={() => router.push('/lab2')} />
     </View>
   );
 };
