@@ -38,13 +38,16 @@ const Lab2 = () => {
 
   return (
     <View style={[styles.item,{backgroundColor: isDarkTheme ? "#121212":"#f0f0f0"}]}>
+
       <FlatList
         data={users}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
+
           <View style={[styles.item,{backgroundColor: isDarkTheme ? "#121212":"#f0f0f0"}]}>
             <Text style={[styles.item,{color: isDarkTheme ? "#f0f0f0":"#121212"}]}>{item.name}</Text>
             <Text style={[{color: isDarkTheme ? "#f0f0f0":"#121212"}]}>{item.email}</Text>
+
           </View>
         )}
       />
@@ -53,6 +56,7 @@ const Lab2 = () => {
 };
 
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
         padding: 20,
@@ -62,6 +66,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10,
     },
+
   container: {
     flex: 1,
     padding: 20,
@@ -83,4 +88,6 @@ const styles = StyleSheet.create({
   },
 });
 
+
 export default Lab2;
+

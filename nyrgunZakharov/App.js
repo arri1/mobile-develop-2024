@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import Lab1 from "./screens/useState";
+
 import Lab2 from "./screens/useEffect";
 import Lab3 from "./screens/useMemo";
 import { View, Text, Button, StyleSheet } from 'react-native';
@@ -11,6 +12,7 @@ const Tab = createBottomTabNavigator();
 
 const AppContent = () => {
   const { isDarkTheme, toggleTheme } = useContext(ThemeContext); // Используем контекст
+
 
   return (
     <NavigationContainer>
@@ -41,6 +43,7 @@ export default function App() {
     <ThemeProvider>
       <AppContent />
     </ThemeProvider>
+
   );
 }
 
