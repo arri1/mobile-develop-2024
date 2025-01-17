@@ -1,51 +1,56 @@
-import { router } from 'expo-router';
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Button } from 'react-native';
 
 const Lab3Page = () => {
-  const [name, setName] = useState('');
-  const [isGreetingVisible, setIsGreetingVisible] = useState(false);
+  const [ethPrice, setEthPrice] = useState<number | null>(null); // Храним текущий курс Ethereum
+  const [error, setError] = useState<string | null>(null); // Для обработки ошибок
+  const [loading, setLoading] = useState<boolean>(true); // Индикатор загрузки
 
-  // Используем useEffect для отслеживания изменений имени
-  useEffect(() => {
-    console.log(`Имя изменено на: ${name}`);
-  }, [name]);
+  const fetchEthPrice = async () => {
+    setLoading(true); // Включаем индикатор загрузки при новом запросе
+    try {
+      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=rub'); // API для курса
+      if (!response.ok) {
+        throw new Error('Ошибка загрузки данных');
+      }
+      const data = await response.json();
+      setEthPrice(data.ethereum.rub); // Устанавливаем курс Ethereum к рублю
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message); // Устанавливаем сообщение об ошибке
+      } else {
+        setError('Неизвестная ошибка');
+      }
+    } finally {
+      setLoading(false); // Скрываем индикатор загрузки
+    }
+  };
 
-  // Используем useEffect для действия при загрузке компонента
   useEffect(() => {
-    console.log('Компонент MyPage загружен');
-    return () => {
-      console.log('Компонент MyPage будет размонтирован');
-    };
+    fetchEthPrice(); // Загружаем данные при первом рендере
   }, []);
 
-  // Мемоизируем приветствие, чтобы пересчитывать только при изменении `name`
-  const greeting = useMemo(() => {
-    console.log('Приветствие обновлено');
-    return name ? `Привет, ${name}!` : '';
-  }, [name]);
-
-  const handlePress = () => {
-    setIsGreetingVisible(true);
-  };
+  // Мемоизируем вычисление округленного значения курса Ethereum
+  const formattedEthPrice = useMemo(() => {
+    console.log('Курс Ethereum обновлен');
+    return ethPrice ? ethPrice.toFixed(2) : '—'; // Возвращаем округленный результат
+  }, [ethPrice]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Введите ваше имя:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Ваше имя"
-        value={name}
-        onChangeText={setName}
-      />
-      <Button title="Поздороваться" onPress={handlePress} />
-      {isGreetingVisible && greeting ? (
-        <Text style={styles.greeting}>{greeting}</Text>
-      ) : null}
+      <Text style={styles.title}>Курс Ethereum к рублю</Text>
 
-      {/* Кнопки для перехода на другие страницы */}
-      <Button title="Вернуться на главную" onPress={() => router.push('/')} />
-      <Button title="Перейти ко 2-й лабе" onPress={() => router.push('/lab2')} />
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : error ? (
+        <Text style={styles.error}>Ошибка: {error}</Text>
+      ) : (
+        <View style={styles.result}>
+          <Text style={styles.price}>Текущий курс: {formattedEthPrice} ₽</Text>
+        </View>
+      )}
+
+      <Button title="Обновить курс" onPress={fetchEthPrice} />
     </View>
   );
 };
@@ -59,21 +64,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   title: {
-    fontSize: 18,
-    marginBottom: 8,
-  },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    paddingHorizontal: 8,
+    fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 16,
-    width: '100%',
-    borderRadius: 4,
   },
-  greeting: {
+  error: {
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  result: {
     marginTop: 16,
+    alignItems: 'center',
+  },
+  price: {
     fontSize: 20,
+    fontWeight: 'bold',
     color: '#333',
   },
 });
