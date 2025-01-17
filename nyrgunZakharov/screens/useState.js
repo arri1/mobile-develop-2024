@@ -1,8 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ThemeContext } from '../ThemeContext';
-
-
 
 const Lab1 = () => {
   const { isDarkTheme } = useContext(ThemeContext);
@@ -15,9 +14,11 @@ const Lab1 = () => {
   return (
 
     <View style={[styles.container, { backgroundColor: isDarkTheme ? '#121212' : '#f0f0f0' }]}>
-                <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#333' }]}>Счетчик: {count}</Text>
+      <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#333' }]}>Счетчик: {count}</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: isDarkTheme ? '#007bff' : '#0056b3' }]} onPress={increment}>
+        <Text style={styles.buttonText}>Увеличить</Text>
+      </TouchableOpacity>
 
-      <Button title="Увеличить" onPress={increment} />
     </View>
   );
 };
@@ -25,24 +26,30 @@ const Lab1 = () => {
 const styles = StyleSheet.create({
   container: {
 
-      flex: 1,
-      padding: 20,
-  },
-  title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      marginBottom: 10,
-  },
-  container: {
-
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5fcff',
+    padding: 20,
   },
-  text: {
-    fontSize: 20,
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 20,
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
