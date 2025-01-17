@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
-const MyPage = () => {
+const IndexPage = () => {
   const [name, setName] = useState('');
   const [greeting, setGreeting] = useState('');
 
@@ -52,4 +52,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyPage;
+export default IndexPage;
