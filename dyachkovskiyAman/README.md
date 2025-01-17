@@ -1,0 +1,1 @@
+https://www.figma.com/design/n7VPFr1WCnNtoGehjfsHRl/dyachkovskiyAman?node-id=0-1&p=f&t=350fJX5bCCnrD7vW-0

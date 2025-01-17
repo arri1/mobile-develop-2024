@@ -2,16 +2,19 @@ import React, { useContext } from 'react';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import Lab1 from "./screens/useState";
+
 import Lab2 from "./screens/useEffect";
 import Lab3 from "./screens/useMemo";
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ThemeProvider, ThemeContext } from './ThemeContext';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+
 const Tab = createBottomTabNavigator();
 
 const AppContent = () => {
   const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
+
 
   return (
     <NavigationContainer>
@@ -61,6 +64,7 @@ export default function App() {
     <ThemeProvider>
       <AppContent />
     </ThemeProvider>
+
   );
 }
 
