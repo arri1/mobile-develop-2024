@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
-import Lab1 from "./components/lab1";
+import AppNavigator from "./components/appNavigator";
 import React from "react";
 
 const App = () => {
-  return <Lab1 />;
+  return <AppNavigator />;
 };
 
 export default App;
