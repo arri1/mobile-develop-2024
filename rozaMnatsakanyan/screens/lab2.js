@@ -1,18 +1,24 @@
+// screens/lab2.js
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
 export default function Lab2() {
   const [count, setCount] = useState(0);
   const [message, setMessage] = useState('Привет!');
 
+  // useEffect будет вызываться при монтировании компонента
   useEffect(() => {
-    if (count >= 10) {
-      setMessage('Отличная работа!');
-    }
-  }, [count]); // Используем useEffect для отслеживания изменения count
+    console.log('Lab2 экран загружен!');
+    return () => {
+      console.log('Lab2 экран размонтирован!');
+    };
+  }, []);  // Пустой массив зависимостей, значит эффект выполнится только один раз при монтировании
 
   const incrementCounter = () => {
     setCount(prevCount => prevCount + 1);
+    if (count >= 10) {
+      setMessage('Отличная работа!');
+    }
   };
 
   const resetCounter = () => {
@@ -25,16 +31,8 @@ export default function Lab2() {
       <Text style={styles.message}>{message}</Text>
       <Text style={styles.counter}>Счетчик: {count}</Text>
       <View style={styles.buttonContainer}>
-        <Button 
-          title="Увеличить" 
-          onPress={incrementCounter}
-          color="#007AFF"
-        />
-        <Button 
-          title="Сбросить" 
-          onPress={resetCounter}
-          color="#FF3B30"
-        />
+        <Button title="Увеличить" onPress={incrementCounter} color="#007AFF" />
+        <Button title="Сбросить" onPress={resetCounter} color="#FF3B30" />
       </View>
     </View>
   );
