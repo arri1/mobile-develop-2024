@@ -7,17 +7,19 @@ export default function Lab2() {
   const [count, setCount] = useState(0);
   // Состояние для сообщения, по умолчанию 'Привет!'
   const [message, setMessage] = useState('Привет!');
+  // Состояние для фона, изначально белый
+  const [backgroundColor, setBackgroundColor] = useState('#fff');
 
-  // Хук useEffect с пустым массивом зависимостей
+  // Хук useEffect, который срабатывает при изменении состояния count
+  // Работает как "сделай что-то после рендера"
   useEffect(() => {
-    // Этот код выполняется, когда экран загружается
-    console.log('Lab2 экран загружен!');
-
-    // Функция очистки, которая выполнится при размонтировании экрана
-    return () => {
-      console.log('Lab2 экран размонтирован!');
-    };
-  }, []); // [] означает, что useEffect выполнится только один раз, при монтировании компонента
+    // Каждый раз, когда count изменяется, меняем цвет фона
+    if (count % 2 === 0) {
+      setBackgroundColor('#A8DADC'); // Если четное, ставим голубой
+    } else {
+      setBackgroundColor('#F1FAEE'); // Если нечетное, ставим светлый
+    }
+  }, [count]); // Зависимость от count, значит, будет срабатывать при изменении count
 
   // Функция для увеличения счетчика на 1
   const incrementCounter = () => {
@@ -31,10 +33,11 @@ export default function Lab2() {
   const resetCounter = () => {
     setCount(0); // Сбрасываем счетчик
     setMessage('Привет!'); // Возвращаем сообщение 'Привет!'
+    setBackgroundColor('#fff'); // Возвращаем начальный цвет фона
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor }]}> {/* Используем динамический стиль фона */}
       <Text style={styles.message}>{message}</Text> {/* Показываем сообщение */}
       <Text style={styles.counter}>Счетчик: {count}</Text> {/* Показываем текущее значение счетчика */}
       <View style={styles.buttonContainer}>
@@ -48,9 +51,8 @@ export default function Lab2() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   message: {
     fontSize: 24,
