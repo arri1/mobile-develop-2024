@@ -1,15 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const loadThemeFromStorage = async () => {
+export const loadTheme = createAsyncThunk('theme/loadTheme', async (_, { dispatch }) => {
   try {
     const storedTheme = await AsyncStorage.getItem('Theme')
-    return storedTheme ? JSON.parse(storedTheme) : false
+    const theme = storedTheme ? JSON.parse(storedTheme) : false
+    dispatch(setTheme(theme))
+    return theme
   } catch (e) {
     console.error('Ошибка загрузки темы:', e)
     return false
   }
-}
+})
 
 const themeSlice = createSlice({
   name: 'theme',
@@ -28,10 +30,4 @@ const themeSlice = createSlice({
 })
 
 export const { toggleTheme, setTheme } = themeSlice.actions
-
-export const loadTheme = () => async (dispatch) => {
-  const theme = await loadThemeFromStorage()
-  dispatch(setTheme(theme))
-}
-
 export default themeSlice.reducer

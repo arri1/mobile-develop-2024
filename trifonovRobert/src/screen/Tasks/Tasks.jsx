@@ -1,13 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Button, FlatList, Text, TextInput, TouchableOpacity, View, Switch } from 'react-native'
+import { FlatList, Text, TextInput, TouchableOpacity, View, Switch } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { addTask, removeTask, toggleTask, loadTasks } from '../../store/slices/tasksSlice'
-import { styles } from './Tasks.style'
+import { getStyles } from './Tasks.style'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 export default function TasksScreen() {
+  const isDarkTheme = useSelector((state) => state.theme.isDarkTheme)
+  const styles = getStyles(isDarkTheme)
+
   const [task, setTask] = useState('')
-  const [showCompleted, setShowCompleted] = useState(true)
   const dispatch = useDispatch()
   const tasks = useSelector((state) => state.tasks.items).filter(task => task !== undefined)
 
@@ -31,6 +33,7 @@ export default function TasksScreen() {
       <TextInput
         style={styles.input}
         placeholder="Добавить задачу..."
+        placeholderTextColor={isDarkTheme ? '#AAA' : '#666'}
         value={task}
         onChangeText={setTask}
       />
@@ -38,52 +41,47 @@ export default function TasksScreen() {
         <Text style={styles.addButtonText}>Добавить</Text>
       </TouchableOpacity>
 
-      <FlatList
-        data={activeTasks}
-        keyExtractor={(item) => (item?.id ? item.id.toString() : Math.random().toString())}
-        renderItem={({ item }) => (
-          <View style={styles.taskContainer}>
-            <Text style={styles.taskText}>{item.text}</Text>
-            <View style={styles.control}>
-              <Switch value={item.completed} onValueChange={() => dispatch(toggleTask(item.id))} />
-              <TouchableOpacity onPress={() => dispatch(removeTask(item.id))}>
-                <Icon name={'close'} size={30} color={'#f44'} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
-      />
-
-      {completedTasks.length > 0 && (
-        <TouchableOpacity
-          style={styles.showCompletedButton}
-          onPress={() => setShowCompleted(!showCompleted)}
-        >
-          <Text style={styles.showCompletedText}>
-            {showCompleted ? 'Скрыть выполненные' : 'Показать выполненные'}
-          </Text>
-        </TouchableOpacity>
-      )}
-
-      {showCompleted && (
-        <FlatList
-          data={completedTasks}
-          keyExtractor={(item) => (item?.id ? item.id.toString() : Math.random().toString())}
-          renderItem={({ item }) => (
-            <View style={styles.taskContainer}>
-              <Text style={[styles.taskText, { textDecorationLine: 'line-through', color: 'gray' }]}>
-                {item.text}
-              </Text>
-              <View style={styles.control}>
-                <Switch value={item.completed} onValueChange={() => dispatch(toggleTask(item.id))} />
-                <TouchableOpacity onPress={() => dispatch(removeTask(item.id))}>
-                  <Icon name={'close'} size={30} color={'#f44'} />
-                </TouchableOpacity>
+      <View style={styles.taskSections}>
+        <View style={styles.taskListContainer}>
+          <Text style={styles.sectionTitle}>Активные задачи</Text>
+          <FlatList
+            data={activeTasks}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.taskContainer}>
+                <Text style={styles.taskText}>{item.text}</Text>
+                <View style={styles.control}>
+                  <Switch value={item.completed} onValueChange={() => dispatch(toggleTask(item.id))} />
+                  <TouchableOpacity onPress={() => dispatch(removeTask(item.id))}>
+                    <Icon name="close" size={30} color="#f44" />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          )}
-        />
-      )}
+            )}
+          />
+        </View>
+
+        <View style={styles.taskListContainer}>
+          <Text style={styles.sectionTitle}>Выполненные задачи</Text>
+          <FlatList
+            data={completedTasks}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.taskContainer}>
+                <Text style={[styles.taskText, styles.completedTaskText]}>
+                  {item.text}
+                </Text>
+                <View style={styles.control}>
+                  <Switch value={item.completed} onValueChange={() => dispatch(toggleTask(item.id))} />
+                  <TouchableOpacity onPress={() => dispatch(removeTask(item.id))}>
+                    <Icon name="close" size={30} color="#f44" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          />
+        </View>
+      </View>
     </View>
   )
 }

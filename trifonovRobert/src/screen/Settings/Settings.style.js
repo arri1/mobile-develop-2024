@@ -1,23 +1,73 @@
-import {StyleSheet} from 'react-native'
+import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+export const getStyles = (isDark) => StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff'
+    backgroundColor: isDark ? '#2E2E2E' : '#F9F9F9',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 10
+    textAlign: 'center',
+    marginBottom: 20,
+    color: isDark ? '#FAFAFA' : '#333',
   },
   settingRow: {
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20
+    justifyContent: 'space-between',
+    width: '90%',
+    backgroundColor: isDark ? '#3A3A3A' : '#FFF',
+    padding: 15,
+    borderRadius: 12,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: isDark ? 0.2 : 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   settingText: {
-    fontSize: 18
-  }
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: isDark ? '#EAEAEA' : '#555',
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: isDark ? '#FF7043' : '#FF5722',
+    padding: 15,
+    borderRadius: 12,
+    width: '90%',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: isDark ? 0.2 : 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    marginBottom: 15,
+  },
+  resetButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: isDark ? '#E57373' : '#D32F2F',
+    padding: 15,
+    borderRadius: 12,
+    width: '90%',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: isDark ? 0.2 : 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: '#fff',
+    fontWeight: 'bold',
+    marginLeft: 10,
+  },
 })

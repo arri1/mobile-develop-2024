@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -8,24 +8,38 @@ import StatisticsScreen from './src/screen/Statistics/Statistics'
 import SettingsScreen from './src/screen/Settings/Settings'
 import { store } from './src/store/store'
 import { loadTheme } from './src/store/slices/themeSlice'
+import { ActivityIndicator, View } from 'react-native'
 
 const Tab = createBottomTabNavigator()
 
 function MainApp() {
   const dispatch = useDispatch()
   const isDarkTheme = useSelector((state) => state.theme.isDarkTheme)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    dispatch(loadTheme())
+    const loadAppTheme = async () => {
+      await dispatch(loadTheme())
+      setIsLoading(false)
+    }
+    loadAppTheme()
   }, [dispatch])
 
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    )
+  }
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={isDarkTheme ? DarkTheme : DefaultTheme}>
       <Tab.Navigator
         id={'main'}
         screenOptions={({ route }) => ({
           tabBarIcon: ({ _, color, size }) => {
-            let iconName;
+            let iconName
             if (route.name === 'Tasks') iconName = 'checkmark-done-outline'
             else if (route.name === 'Statistics') iconName = 'analytics-outline'
             else if (route.name === 'Settings') iconName = 'cog-outline'
