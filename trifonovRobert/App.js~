@@ -10,7 +10,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        id={}
+        id={'main'}
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -23,6 +23,8 @@ export default function App() {
             }
             return <Icon name={iconName} size={size} color={color} />;
           },
+          tabBarShowLabel: false,
+          headerShown: false
         })}
       >
         <Tab.Screen name="Tasks" component={Tasks}/>

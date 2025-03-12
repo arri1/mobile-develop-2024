@@ -1,9 +1,35 @@
-import React from 'react'
-import {Button, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
+import React, { useEffect } from 'react'
+import { Button, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export default function Tasks() {
+export default function TasksScreen() {
   const [task, setTask] = React.useState('')
   const [tasks, setTasks] = React.useState([])
+
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const storedTasks = await AsyncStorage.getItem('tasks')
+        if (storedTasks) setTasks(JSON.parse(storedTasks))
+      } catch (e) {
+        console.error('Failed to load tasks:', e)
+      }
+    }
+
+    loadTasks()
+  }, [])
+
+  useEffect(() => {
+    const saveTasks = async () => {
+      try {
+        await AsyncStorage.setItem('tasks', JSON.stringify(tasks))
+      } catch (e) {
+        console.error('Failed to save tasks:', e)
+      }
+    }
+
+    saveTasks()
+  }, [tasks])
 
   const addTask = () => {
     if (task.trim()) {
@@ -25,11 +51,11 @@ export default function Tasks() {
         value={task}
         onChangeText={setTask}
       />
-      <Button title="Добавить" onPress={addTask}/>
+      <Button style={styles.addButton} title="Добавить" onPress={addTask} />
       <FlatList
         data={tasks}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <View style={styles.taskContainer}>
             <Text style={styles.taskText}>{item}</Text>
             <TouchableOpacity onPress={() => removeTask(index)} style={styles.deleteButton}>
@@ -60,6 +86,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 5
   },
+  addButton: {
+    borderRadius: 10
+  }
   taskContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
