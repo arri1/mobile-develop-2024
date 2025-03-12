@@ -1,51 +1,29 @@
-import React, {useEffect, useMemo} from 'react'
-import { Button, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useEffect, useMemo, useState } from 'react'
+import { Button, FlatList, Text, TextInput, TouchableOpacity, View, Switch } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import { addTask, removeTask, toggleTask, loadTasks } from '../../store/slices/tasksSlice'
 import { styles } from './Tasks.style'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 export default function TasksScreen() {
-  const [task, setTask] = React.useState('')
-  const [tasks, setTasks] = React.useState([])
+  const [task, setTask] = useState('')
+  const [showCompleted, setShowCompleted] = useState(true)
+  const dispatch = useDispatch()
+  const tasks = useSelector((state) => state.tasks.items).filter(task => task !== undefined)
 
   useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        const storedTasks = JSON.parse(await AsyncStorage.getItem('Tasks'))
-        if (storedTasks) setTasks(storedTasks)
-      } catch (e) {
-        console.error('Failed to load Tasks:', e)
-      }
-    }
+    dispatch(loadTasks())
+  }, [dispatch])
 
-    loadTasks()
-  }, [])
-
-  useEffect(() => {
-    if (!tasks) return
-
-    const saveTasks = async () => {
-      try {
-        await AsyncStorage.setItem('Tasks', JSON.stringify(tasks))
-      } catch (e) {
-        console.error('Failed to save Tasks:', e)
-      }
-    }
-
-    saveTasks()
-  }, [tasks])
-
-  const addTask = () => {
+  const handleAddTask = () => {
     if (task.trim()) {
-      setTasks([...tasks, task.trim()])
+      dispatch(addTask(task.trim()))
       setTask('')
     }
   }
 
-  const removeTask = (index) => {
-    setTasks(tasks.filter((_, i) => i !== index))
-  }
-
-  const completedTasksCount = useMemo(() => tasks.length, [tasks])
+  const activeTasks = useMemo(() => tasks.filter(task => !task.completed), [tasks])
+  const completedTasks = useMemo(() => tasks.filter(task => task.completed), [tasks])
 
   return (
     <View style={styles.container}>
@@ -56,19 +34,17 @@ export default function TasksScreen() {
         value={task}
         onChangeText={setTask}
       />
-      <Button style={styles.addButton} title="Добавить" onPress={addTask} />
+      <TouchableOpacity style={styles.addButton} onPress={handleAddTask}>
+        <Text style={styles.addButtonText}>Добавить</Text>
+      </TouchableOpacity>
+
       <FlatList
-        data={tasks}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (
+        data={activeTasks}
+        keyExtractor={(item) => (item?.id ? item.id.toString() : Math.random().toString())}
+        renderItem={({ item }) => (
           <View style={styles.taskContainer}>
-            <Text style={styles.taskText}>{item}</Text>
-            <TouchableOpacity onPress={() => removeTask(index)} style={styles.deleteButton}>
-              <Text style={styles.deleteText}>X</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      />
-    </View>
-  )
-}
+            <Text style={styles.taskText}>{item.text}</Text>
+            <View style={styles.control}>
+              <Switch value={item.completed} onValueChange={() => dispatch(toggleTask(item.id))} />
+              <TouchableOpacity onPress={() => dispatch(removeTask(item.id))}>
+                <Icon name={'
