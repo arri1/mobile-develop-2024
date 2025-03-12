@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, {useEffect, useMemo} from 'react'
 import { Button, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { styles } from './Tasks.style'
@@ -45,9 +45,12 @@ export default function TasksScreen() {
     setTasks(tasks.filter((_, i) => i !== index))
   }
 
+  const completedTasksCount = useMemo(() => tasks.length, [tasks])
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Todo List</Text>
+      <Text style={styles.subtitle}>Количество задач: {completedTasksCount}</Text>
       <TextInput
         style={styles.input}
         placeholder="Добавить задачу..."

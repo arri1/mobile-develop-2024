@@ -9,11 +9,6 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 5
-  },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 10
   },
   input: {
