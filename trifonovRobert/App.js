@@ -9,6 +9,7 @@ import SettingsScreen from './src/screen/Settings/Settings'
 import { store } from './src/store/store'
 import { loadTheme } from './src/store/slices/themeSlice'
 import { ActivityIndicator, View } from 'react-native'
+import ApiScreen from './src/screen/Api/Api'
 
 const Tab = createBottomTabNavigator()
 
@@ -40,9 +41,25 @@ function MainApp() {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ _, color, size }) => {
             let iconName
-            if (route.name === 'Tasks') iconName = 'checkmark-done-outline'
-            else if (route.name === 'Statistics') iconName = 'analytics-outline'
-            else if (route.name === 'Settings') iconName = 'cog-outline'
+            switch (route.name) {
+              case 'Tasks': {
+                iconName = 'checkmark-done-outline'
+                break
+              }
+              case 'Statistics': {
+                iconName = 'analytics-outline'
+                break
+              }
+              case 'Settings': {
+                iconName = 'cog-outline'
+                break
+              }
+              case 'Api': {
+                iconName = 'diamond'
+                break
+              }
+              default: break
+            }
             return <Icon name={iconName} size={size} color={color} />
           },
           tabBarShowLabel: false,
@@ -52,6 +69,7 @@ function MainApp() {
         <Tab.Screen name="Tasks" component={TasksScreen} />
         <Tab.Screen name="Statistics" component={StatisticsScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Api" component={ApiScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   )
