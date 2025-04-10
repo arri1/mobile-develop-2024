@@ -7,7 +7,7 @@ import { Button, View, StyleSheet } from 'react-native';
 import Lab1 from './screens/lab1';
 import Lab2 from './screens/lab2';
 import Lab3 from './screens/lab3';
-// import Lab4 from './screens/lab4';
+import Lab4 from './screens/lab4';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,10 +26,10 @@ const MainMenu = ({ navigation }) => {
         title="Перейти к Лабораторной 3"
         onPress={() => navigation.navigate('Lab3')}
       />
-      {/* <Button
+      <Button
         title="Перейти к Лабораторной 4 (Redux)"
         onPress={() => navigation.navigate('Lab4')}
-      /> */}
+      />
     </View>
   );
 };
@@ -61,7 +61,7 @@ const App = () => {
           <Stack.Screen name="Lab1" component={Lab1} options={{ title: 'Лабораторная 1' }} />
           <Stack.Screen name="Lab2" component={Lab2} options={{ title: 'Лабораторная 2' }} />
           <Stack.Screen name="Lab3" component={Lab3} options={{ title: 'Лабораторная 3' }} />
-          {/* <Stack.Screen name="Lab4" component={Lab4} options={{ title: 'Redux Demo' }} /> */}
+          <Stack.Screen name="Lab4" component={Lab4} options={{ title: 'Redux Demo' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
