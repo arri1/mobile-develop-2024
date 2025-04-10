@@ -1,12 +1,15 @@
 // screens/lab1.js
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
 export default function Lab1() {
   // Состояние для счетчика, начинаем с 0
   const [count, setCount] = useState(0);
   // Состояние для сообщения, по умолчанию 'Привет!'
   const [message, setMessage] = useState('Привет!');
+
+  const { value, lastUpdated } = useSelector((state) => state.number);
 
   // Функция для увеличения счетчика на 1
   const incrementCounter = () => {
@@ -29,6 +32,13 @@ export default function Lab1() {
       <View style={styles.buttonContainer}>
         <Button title="Увеличить" onPress={incrementCounter} color="#007AFF" /> {/* Кнопка для увеличения счетчика */}
         <Button title="Сбросить" onPress={resetCounter} color="#FF3B30" /> {/* Кнопка для сброса счетчика */}
+      </View>
+      <View style={styles.reduxCard}>
+        <Text style={styles.reduxTitle}>Значение из Redux:</Text>
+        <Text style={styles.reduxValue}>{value}</Text>
+        {lastUpdated && (
+          <Text style={styles.reduxTimestamp}>Обновлено: {lastUpdated}</Text>
+        )}
       </View>
     </View>
   );
@@ -53,5 +63,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '60%',
     justifyContent: 'space-between',
+  },
+  reduxCard: {
+    backgroundColor: '#f8f9fa',
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+  reduxTitle: {
+    fontSize: 16,
+    color: '#34495e',
+    marginBottom: 5,
+  },
+  reduxValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2980b9',
+    textAlign: 'center',
+  },
+  reduxTimestamp: {
+    fontSize: 12,
+    color: '#7f8c8d',
+    textAlign: 'center',
+    marginTop: 5,
   },
 });
