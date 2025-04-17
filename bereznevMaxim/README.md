@@ -1,0 +1,1 @@
+Figma https://www.figma.com/design/WEWE7fhBsYWV5YXRYAA0BA/РМП?node-id=0-1&p=f&t=I306zKc4xsmxAUNF-0
