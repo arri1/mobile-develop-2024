@@ -9,6 +9,7 @@ const HomeScreen = () => {
     { id: 1, title: 'Лабораторная 1', description: 'Изменение формы и цвета фигуры' },
     { id: 2, title: 'Лабораторная 2', description: 'Генератор случайных цитат' },
     { id: 3, title: 'Лабораторная 3', description: 'Приложение для загрузки данных с API' },
+    { id: 4, title: 'Лабораторная 4', description: 'Приложение для USEMEMO' },
   ];
 
   return (

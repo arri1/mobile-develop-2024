@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { 
   View, 
   Text, 
@@ -10,7 +10,7 @@ import {
   Keyboard 
 } from 'react-native';
 
-const API_KEY = 'fb55c434b593d7e53d17f9a7911897f4'; 
+const API_KEY = 'fb55c434b593d7e53d17f9a7911897f4';
 const API_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 const WeatherApp = () => {
@@ -19,16 +19,33 @@ const WeatherApp = () => {
   const [error, setError] = useState(null);
   const [cityInput, setCityInput] = useState('');
   const [lastSearchedCity, setLastSearchedCity] = useState('');
+  const [log, setLog] = useState('');
+  
+  // Мемо
+  const fetchWeatherWithMemo = useMemo(() => async () => {
+    const start = performance.now();
+    const result = heavyCalculation();
+    const time = performance.now() - start;
+    setLog(prev => `[Memo] Вычисления: ${time.toFixed(2)}ms\n${prev}`);
+    await handleWeatherFetch();
+  }, [cityInput]);
 
-  // Оптимизированная функция для загрузки данных
-  const fetchWeather = useMemo(() => async () => {
+  // Обычная версия без мемо
+  const fetchWeatherWithoutMemo = async () => {
+    const start = performance.now();
+    const result = heavyCalculation();
+    const time = performance.now() - start;
+    setLog(prev => `[Без оптимизации] Вычисления: ${time.toFixed(2)}ms\n${prev}`);
+    await handleWeatherFetch();
+  };
+
+  const handleWeatherFetch = async () => {
     if (!cityInput.trim()) return;
-    
     try {
       setLoading(true);
       setError(null);
-      Keyboard.dismiss(); // Скрываем клавиатуру
-      
+      Keyboard.dismiss();
+
       const response = await fetch(
         `${API_URL}?q=${cityInput.trim()}&appid=${API_KEY}&units=metric&lang=ru`
       );
@@ -38,18 +55,31 @@ const WeatherApp = () => {
       }
       
       const data = await response.json();
-      setWeatherData(data);
-      setLastSearchedCity(cityInput.trim());
-      setCityInput('');
+      processWeatherData(data);
     } catch (err) {
       setError(err.message);
       setWeatherData(null);
     } finally {
       setLoading(false);
     }
-  }, [cityInput]);
+  };
+  const heavyCalculation = (data) => {
+    let result = 0;
+    for(let i = 0; i < 5000000; i++) {
+      result += Math.sqrt(i) * Math.sin(i);
+    }
+    return {
+      ...data,
+      calc: result 
+    };
+  };
+  
+  const processWeatherData = (data) => {
+    setWeatherData(data);
+    setLastSearchedCity(cityInput.trim());
+    //setCityInput('');
+  };
 
-  // Мемоизированное преобразование данных о погоде
   const weatherInfo = useMemo(() => {
     if (!weatherData) return null;
     
@@ -68,21 +98,31 @@ const WeatherApp = () => {
       <View style={styles.content}>
         <Text style={styles.title}>Проверка погоды</Text>
         
-        <View style={styles.inputContainer}>
+        <View style={styles.inputGroup}>
           <TextInput
             style={styles.input}
             placeholder="Введите город"
             value={cityInput}
             onChangeText={setCityInput}
-            onSubmitEditing={fetchWeather}
           />
-          <TouchableOpacity 
-            style={styles.searchButton} 
-            onPress={fetchWeather}
-            disabled={loading || !cityInput.trim()}
-          >
-            <Text style={styles.searchButtonText}>Поиск</Text>
-          </TouchableOpacity>
+          
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity 
+              style={[styles.button, styles.memoButton]}
+              onPress={fetchWeatherWithMemo}
+              disabled={loading || !cityInput.trim()}
+            >
+              <Text style={styles.buttonText}>С useMemo</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[styles.button, styles.regularButton]}
+              onPress={fetchWeatherWithoutMemo}
+              disabled={loading || !cityInput.trim()}
+            >
+              <Text style={styles.buttonText}>Без useMemo</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {loading ? (
@@ -90,25 +130,32 @@ const WeatherApp = () => {
         ) : error ? (
           <Text style={styles.errorText}>{error}</Text>
         ) : weatherInfo ? (
-          <View style={styles.weatherContainer}>
-            <Text style={styles.cityText}>{lastSearchedCity}</Text>
-            <Text style={styles.tempText}>{weatherInfo.temp}°C</Text>
-            <Text style={styles.descText}>
-              {weatherInfo.description.charAt(0).toUpperCase() + weatherInfo.description.slice(1)}
-            </Text>
-            <View style={styles.details}>
-              <Text style={styles.detailText}>Ощущается: {weatherInfo.feelsLike}°C</Text>
-              <Text style={styles.detailText}>Влажность: {weatherInfo.humidity}%</Text>
-              <Text style={styles.detailText}>Ветер: {weatherInfo.wind} м/с</Text>
-            </View>
-          </View>
+          <WeatherInfo 
+            city={lastSearchedCity}
+            info={weatherInfo}
+          />
         ) : (
-          <Text style={styles.placeholder}>Введите город и нажмите "Поиск"</Text>
+          <Text style={styles.placeholder}>Введите город и нажмите кнопку</Text>
         )}
       </View>
     </SafeAreaView>
   );
 };
+
+const WeatherInfo = ({ city, info }) => (
+  <View style={styles.weatherContainer}>
+    <Text style={styles.cityText}>{city}</Text>
+    <Text style={styles.tempText}>{info.temp}°C</Text>
+    <Text style={styles.descText}>
+      {info.description.charAt(0).toUpperCase() + info.description.slice(1)}
+    </Text>
+    <View style={styles.details}>
+      <Text style={styles.detailText}>Ощущается: {info.feelsLike}°C</Text>
+      <Text style={styles.detailText}>Влажность: {info.humidity}%</Text>
+      <Text style={styles.detailText}>Ветер: {info.wind} м/с</Text>
+    </View>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -126,12 +173,10 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     color: '#333',
   },
-  inputContainer: {
-    flexDirection: 'row',
+  inputGroup: {
     marginBottom: 20,
   },
   input: {
-    flex: 1,
     height: 50,
     borderColor: '#ddd',
     borderWidth: 1,
@@ -139,20 +184,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: '#fff',
     fontSize: 16,
+    marginBottom: 10,
   },
-  searchButton: {
-    marginLeft: 10,
-    backgroundColor: '#6200ee',
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  button: {
+    flex: 1,
+    height: 50,
     borderRadius: 10,
-    paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    opacity: 1,
   },
-  searchButtonDisabled: {
-    opacity: 0.5,
+  memoButton: {
+    backgroundColor: '#6200ee',
   },
-  searchButtonText: {
+  regularButton: {
+    backgroundColor: '#ff4444',
+  },
+  buttonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',

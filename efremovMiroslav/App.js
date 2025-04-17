@@ -9,6 +9,7 @@ import HomeScreen from './screens/HomeScreen';
 import Lab1Screen from './screens/lab1';
 import Lab2Screen from './screens/lab2';
 import Lab3Screen from './screens/lab3';
+import Lab4Screen from './screens/lab4';
 import ProfileScreen from './screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
@@ -37,6 +38,11 @@ function LabsStack() {
         name="Lab3" 
         component={Lab3Screen} 
         options={{ title: 'Лаб. 3 - Погода' }} 
+      />
+      <Stack.Screen 
+        name="Lab4" 
+        component={Lab4Screen} 
+        options={{ title: 'Лаб. 4 - UseMemo' }} 
       />
     </Stack.Navigator>
   );
