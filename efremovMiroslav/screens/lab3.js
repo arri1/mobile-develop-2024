@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { 
   View, 
   Text, 
@@ -19,24 +19,28 @@ const WeatherApp = () => {
   const [error, setError] = useState(null);
   const [cityInput, setCityInput] = useState('');
   const [lastSearchedCity, setLastSearchedCity] = useState('');
-
+  const [log, setLog] = useState('');
+  
   // Мемо
   const fetchWeatherWithMemo = useMemo(() => async () => {
-    console.time('With Memo');
+    const start = performance.now();
+    const result = heavyCalculation();
+    const time = performance.now() - start;
+    setLog(prev => `[Memo] Вычисления: ${time.toFixed(2)}ms\n${prev}`);
     await handleWeatherFetch();
-    console.timeEnd('With Memo');
   }, [cityInput]);
 
   // Обычная версия без мемо
   const fetchWeatherWithoutMemo = async () => {
-    console.time('Without Memo');
+    const start = performance.now();
+    const result = heavyCalculation();
+    const time = performance.now() - start;
+    setLog(prev => `[Без оптимизации] Вычисления: ${time.toFixed(2)}ms\n${prev}`);
     await handleWeatherFetch();
-    console.timeEnd('Without Memo');
   };
 
   const handleWeatherFetch = async () => {
     if (!cityInput.trim()) return;
-    
     try {
       setLoading(true);
       setError(null);
@@ -59,11 +63,21 @@ const WeatherApp = () => {
       setLoading(false);
     }
   };
-
+  const heavyCalculation = (data) => {
+    let result = 0;
+    for(let i = 0; i < 5000000; i++) {
+      result += Math.sqrt(i) * Math.sin(i);
+    }
+    return {
+      ...data,
+      calc: result 
+    };
+  };
+  
   const processWeatherData = (data) => {
     setWeatherData(data);
     setLastSearchedCity(cityInput.trim());
-    setCityInput('');
+    //setCityInput('');
   };
 
   const weatherInfo = useMemo(() => {
@@ -90,7 +104,6 @@ const WeatherApp = () => {
             placeholder="Введите город"
             value={cityInput}
             onChangeText={setCityInput}
-            onSubmitEditing={fetchWeatherWithMemo}
           />
           
           <View style={styles.buttonsContainer}>
