@@ -5,26 +5,37 @@ import {
   FlatList,
   ActivityIndicator,
   StyleSheet,
-  Button,
-  TextInput,
+  TouchableOpacity,
 } from "react-native";
 import axios from "axios";
 
 const Lab2 = () => {
-  const [users, setUsers] = useState([]);
+  const [facts, setFacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [newUserName, setNewUserName] = useState("");
-  const [newUserEmail, setNewUserEmail] = useState("");
 
-  const fetchUsers = async () => {
+  const fetchFact = async () => {
+    try {
+      const response = await axios.get(
+        "https://uselessfacts.jsph.pl/random.json?language=en"
+      );
+      return response.data.text;
+    } catch (err) {
+      throw new Error("Ошибка при получении факта");
+    }
+  };
+
+  const fetchFacts = async (count = 5) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      setUsers(response.data);
+      const promises = Array.from({ length: count }, () => fetchFact());
+      const results = await Promise.all(promises);
+      const formattedFacts = results.map((text, index) => ({
+        id: index + 1 + facts.length,
+        text,
+      }));
+      setFacts((prevFacts) => [...prevFacts, ...formattedFacts]);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -32,24 +43,17 @@ const Lab2 = () => {
     }
   };
 
-  const addUser = () => {
-    if (newUserName.trim() && newUserEmail.trim()) {
-      const newUser = {
-        id: users.length + 1,
-        name: newUserName,
-        email: newUserEmail,
-      };
-      setUsers([...users, newUser]);
-      setNewUserName("");
-      setNewUserEmail("");
-    }
-  };
-
   useEffect(() => {
-    fetchUsers();
+    fetchFacts();
   }, []);
 
-  if (loading) {
+  useEffect(() => {
+    if (facts.length > 0) {
+      console.log(`Загружено фактов: ${facts.length}`);
+    }
+  }, [facts]);
+
+  if (loading && facts.length === 0) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#0000ff" />
@@ -61,43 +65,29 @@ const Lab2 = () => {
     return (
       <View style={styles.errorContainer}>
         <Text>Error: {error}</Text>
-        <Button title="Попробовать снова" onPress={fetchUsers} />
+        <TouchableOpacity style={styles.customButton} onPress={() => fetchFacts()}>
+          <Text style={styles.buttonText}>Попробовать снова</Text>
+        </TouchableOpacity>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      {/* Верхняя полоса с текстом */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>Лабораторная 2</Text>
+        <Text style={styles.headerText}>Лабораторная 2 — Случайные факты</Text>
       </View>
 
-      {/* Основное содержимое */}
-      <Button title="Обновить" onPress={fetchUsers} />
-
-      {/* Поля для добавления нового пользователя */}
-      <TextInput
-        style={styles.input}
-        placeholder="Введите имя"
-        value={newUserName}
-        onChangeText={setNewUserName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Введите почту"
-        value={newUserEmail}
-        onChangeText={setNewUserEmail}
-      />
-      <Button title="Добавить пользователя" onPress={addUser} />
+      <TouchableOpacity style={styles.customButton} onPress={() => fetchFacts(3)}>
+        <Text style={styles.buttonText}>Загрузить ещё факты</Text>
+      </TouchableOpacity>
 
       <FlatList
-        data={users}
+        data={facts}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Text style={styles.name}>{item.name}</Text>
-            <Text>{item.email}</Text>
+            <Text>{item.text}</Text>
           </View>
         )}
       />
@@ -118,7 +108,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: "white",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
   },
   centered: {
@@ -127,25 +117,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   item: {
-    padding: 20,
+    padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
-  },
-  name: {
-    fontWeight: "bold",
   },
   errorContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  input: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    borderRadius: 5,
+  customButton: {
+    backgroundColor: "#28a745",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: "center",
+    margin: 15,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

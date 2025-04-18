@@ -25,6 +25,7 @@ const Lab3 = () => {
     "Ivy",
     "Jack",
   ]);
+
   const leng = 100000000;
   const bigFunc = () => {
     for (let i = 0; i < leng; i++) {}
@@ -37,13 +38,14 @@ const Lab3 = () => {
   const filteredNames = useMemo(() => {
     bigFuncMemo();
     return names.filter((name) =>
-      name.toLowerCase().includes(filterText.toLowerCase()),
+      name.toLowerCase().includes(filterText.toLowerCase())
     );
   }, [filterText, names]);
+
   const filteredNamesWithoutMemo = () => {
     bigFunc();
     return names.filter((name) =>
-      name.toLowerCase().includes(filterText.toLowerCase()),
+      name.toLowerCase().includes(filterText.toLowerCase())
     );
   };
 
@@ -56,11 +58,16 @@ const Lab3 = () => {
 
   return (
     <View style={styles.container}>
-      {/* Верхняя полоса с текстом */}
+      {/* Верхняя полоса */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Лабораторная 3</Text>
       </View>
-      <Switch value={onMemo} onChange={() => setOnMemo(!onMemo)} />
+
+      {/* Переключатель useMemo с подписью */}
+      <View style={styles.switchContainer}>
+        <Text style={styles.switchLabel}>Использовать useMemo:</Text>
+        <Switch value={onMemo} onValueChange={() => setOnMemo(!onMemo)} />
+      </View>
 
       {/* Основное содержимое */}
       <Text style={styles.title}>Фильтр имен</Text>
@@ -93,7 +100,6 @@ const Lab3 = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 4,
     backgroundColor: "#f5f5f5",
   },
   header: {
@@ -107,12 +113,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
+  switchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10,
+    gap: 10,
+  },
+  switchLabel: {
+    fontSize: 16,
+  },
   title: {
     fontSize: 24,
     marginBottom: 20,
     fontWeight: "bold",
     textAlign: "center",
-    marginTop: 10, // Чтобы заголовок не был слишком близко к верхней полосе
+    marginTop: 10,
   },
   input: {
     height: 40,
