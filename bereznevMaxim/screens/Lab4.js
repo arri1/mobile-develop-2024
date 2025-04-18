@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   TextInput,
@@ -6,6 +6,7 @@ import {
   FlatList,
   Text,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { addTask, deleteTask, editTask, toggleTask } from "../store/store";
@@ -33,76 +34,103 @@ export default function Lab4() {
     }
   };
 
-  return (
-    <View style={styles.container}>
-      {/* Верхняя полоса с текстом */}
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Лабораторная 4</Text>
-      </View>
+  const renderHeader = useCallback(() => {
+    return (
+      <View style={styles.headerContent}>
+        <TextInput
+          style={styles.input}
+          placeholder="Введите название задачи"
+          value={title}
+          onChangeText={setTitle}
+          onSubmitEditing={handleAddTask}
+          returnKeyType="done"
+          autoFocus
+        />
+        <View style={styles.addButtonWrapper}>
+          <Button title="Добавить задачу" onPress={handleAddTask} />
+        </View>
 
-      {/* Основное содержимое */}
-      <TextInput
-        style={styles.input}
-        placeholder="Введите название задачи"
-        value={title}
-        onChangeText={setTitle}
-      />
-      <Button title="Добавить задачу" onPress={handleAddTask} />
-
-      <FlatList
-        data={tasks}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.taskContainer}>
-            <View style={styles.taskTextContainer}>
-              <Text style={styles.taskTitle}>{item.name}</Text>
-              <Text style={styles.taskStatus}>
-                Статус: {item.completed ? "Завершено" : "В процессе"}
-              </Text>
-            </View>
-            <View style={styles.buttonContainer}>
+        {editId !== null && (
+          <View style={styles.editContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Новое название задачи"
+              value={newTitle}
+              onChangeText={setNewTitle}
+              onSubmitEditing={handleEditTask}
+              returnKeyType="done"
+              autoFocus
+            />
+            <Button title="Сохранить изменения" onPress={handleEditTask} />
+            <View style={{ marginTop: 10 }}>
               <Button
-                title="Удалить"
-                onPress={() => dispatch(deleteTask(item.id))}
-                color="#FF3B30"
-              />
-              <Button
-                title="Редактировать"
+                title="Отмена"
                 onPress={() => {
-                  setEditId(item.id);
-                  setNewTitle(item.name);
+                  setEditId(null);
+                  setNewTitle("");
                 }}
-                color="#FF9500"
-              />
-              <Button
-                title="Завершить"
-                onPress={() => dispatch(toggleTask(item.id))}
-                color="#4CD964"
+                color="#8E8E93"
               />
             </View>
           </View>
         )}
-      />
+      </View>
+    );
+  }, [title, editId, newTitle, handleAddTask, handleEditTask]);
 
-      {editId && (
-        <View style={styles.editContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Новое название задачи"
-            value={newTitle}
-            onChangeText={setNewTitle}
-          />
-          <Button title="Сохранить изменения" onPress={handleEditTask} />
-          <Button
-            title="Отмена"
-            onPress={() => {
-              setEditId(null);
-              setNewTitle("");
-            }}
-            color="#8E8E93"
-          />
+  const renderTaskItem = useCallback(
+    ({ item }) => (
+      <View style={styles.taskContainer}>
+        <View style={styles.taskTextContainer}>
+          <Text style={styles.taskTitle}>{item.name}</Text>
+          <Text style={styles.taskStatus}>
+            Статус: {item.completed ? "Завершено" : "В процессе"}
+          </Text>
         </View>
-      )}
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={[styles.actionButton, { backgroundColor: "#FF3B30" }]}
+            onPress={() => dispatch(deleteTask(item.id))}
+          >
+            <Text style={styles.buttonText}>Удалить</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.actionButton, { backgroundColor: "#FF9500" }]}
+            onPress={() => {
+              setEditId(item.id);
+              setNewTitle(item.name);
+            }}
+          >
+            <Text style={styles.buttonText}>Редактировать</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.actionButton, { backgroundColor: "#4CD964" }]}
+            onPress={() => dispatch(toggleTask(item.id))}
+          >
+            <Text style={styles.buttonText}>
+              {item.completed ? "Возобновить" : "Завершить"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    ),
+    []
+  );
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Лабораторная 4</Text>
+      </View>
+
+      <FlatList
+        ListHeaderComponent={renderHeader}
+        contentContainerStyle={styles.listContent}
+        data={tasks}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderTaskItem}
+        keyboardShouldPersistTaps="handled"
+      />
     </View>
   );
 }
@@ -114,59 +142,76 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#007AFF",
-    height: 60,
-    justifyContent: "center",
+    height: 90,
+    justifyContent: "flex-end",
     alignItems: "center",
+    paddingBottom: 15,
   },
   headerText: {
     color: "white",
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
+  },
+  listContent: {
+    padding: 20,
+    paddingBottom: 40,
+  },
+  headerContent: {
+    marginBottom: 20,
   },
   input: {
     borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
+    padding: 12,
+    borderRadius: 8,
     borderColor: "#ccc",
-    backgroundColor: "#f9f9f9",
-    marginHorizontal: 20,
+    backgroundColor: "#f0f0f0",
+    marginBottom: 15,
+    fontSize: 16,
+  },
+  addButtonWrapper: {
+    marginBottom: 20,
   },
   taskContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 10,
-    marginBottom: 10,
     borderWidth: 1,
-    borderRadius: 5,
-    borderColor: "#ccc",
-    backgroundColor: "#f9f9f9",
-    marginHorizontal: 20,
+    borderRadius: 10,
+    borderColor: "#ddd",
+    padding: 15,
+    marginBottom: 15,
+    backgroundColor: "#fafafa",
   },
   taskTextContainer: {
-    flex: 2,
-    marginRight: 10,
-  },
-  buttonContainer: {
-    flex: 1,
-    justifyContent: "space-around",
+    marginBottom: 10,
   },
   taskTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
   taskStatus: {
     fontSize: 14,
-    color: "gray",
+    color: "#666",
+    marginTop: 4,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  actionButton: {
+    flex: 1,
+    marginHorizontal: 4,
+    paddingVertical: 8,
+    borderRadius: 6,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
   editContainer: {
+    padding: 15,
     marginTop: 20,
-    backgroundColor: "#ffffff",
-    padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: "#ccc",
     borderWidth: 1,
-    marginHorizontal: 20,
+    backgroundColor: "#fff",
   },
 });
