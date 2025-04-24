@@ -6,52 +6,93 @@ import {
   ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
+  TextInput,
+  Alert,
 } from "react-native";
 import axios from "axios";
+
+const SUPABASE_URL = "https://rcnkladuiqbeznlmxdyy.supabase.co";
+const SUPABASE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJjbmtsYWR1aXFiZXpubG14ZHl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU0OTQ5MjIsImV4cCI6MjA2MTA3MDkyMn0.uLUheY-NnknfQYr9ASK4Y7Ji58b2sUkrtMjT0h2LacE";
 
 const Lab2 = () => {
   const [facts, setFacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [customFact, setCustomFact] = useState("");
 
-  const fetchFact = async () => {
+  const fetchFacts = async () => {
+    setLoading(true);
     try {
-      const response = await axios.get(
-        "https://uselessfacts.jsph.pl/random.json?language=en"
-      );
-      return response.data.text;
+      const response = await axios.get(`${SUPABASE_URL}/rest/v1/facts?select=*`, {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+        },
+      });
+      setFacts(response.data.reverse());
     } catch (err) {
-      throw new Error("Ошибка при получении факта");
+      setError("Ошибка при загрузке фактов");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const fetchFacts = async (count = 5) => {
-    setLoading(true);
-    setError(null);
+  const addCustomFact = async () => {
+    if (customFact.trim()) {
+      try {
+        await axios.post(
+          `${SUPABASE_URL}/rest/v1/facts`,
+          { text: customFact },
+          {
+            headers: {
+              apikey: SUPABASE_KEY,
+              Authorization: `Bearer ${SUPABASE_KEY}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setCustomFact("");
+        setTimeout(fetchFacts, 1000);
+      } catch (err) {
+        setError("Ошибка при добавлении факта");
+      }
+    }
+  };
+
+  const confirmDelete = (id) => {
+    Alert.alert(
+      "Удаление",
+      "Вы действительно хотите удалить этот факт?",
+      [
+        { text: "Отмена", style: "cancel" },
+        {
+          text: "Удалить",
+          style: "destructive",
+          onPress: () => deleteFact(id),
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const deleteFact = async (id) => {
     try {
-      const promises = Array.from({ length: count }, () => fetchFact());
-      const results = await Promise.all(promises);
-      const formattedFacts = results.map((text, index) => ({
-        id: index + 1 + facts.length,
-        text,
-      }));
-      setFacts((prevFacts) => [...prevFacts, ...formattedFacts]);
+      await axios.delete(`${SUPABASE_URL}/rest/v1/facts?id=eq.${id}`, {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+        },
+      });
+      fetchFacts();
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      setError("Ошибка при удалении факта");
     }
   };
 
   useEffect(() => {
     fetchFacts();
   }, []);
-
-  useEffect(() => {
-    if (facts.length > 0) {
-      console.log(`Загружено фактов: ${facts.length}`);
-    }
-  }, [facts]);
 
   if (loading && facts.length === 0) {
     return (
@@ -64,9 +105,9 @@ const Lab2 = () => {
   if (error) {
     return (
       <View style={styles.errorContainer}>
-        <Text>Error: {error}</Text>
-        <TouchableOpacity style={styles.customButton} onPress={() => fetchFacts()}>
-          <Text style={styles.buttonText}>Попробовать снова</Text>
+        <Text style={styles.errorText}>Ошибка: {error}</Text>
+        <TouchableOpacity style={styles.customButton} onPress={fetchFacts}>
+          <Text style={styles.buttonText}>Повторить</Text>
         </TouchableOpacity>
       </View>
     );
@@ -75,19 +116,34 @@ const Lab2 = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Лабораторная 2 — Случайные факты</Text>
+        <Text style={styles.headerText}>Лабораторная 2 — Supabase факты</Text>
       </View>
 
-      <TouchableOpacity style={styles.customButton} onPress={() => fetchFacts(3)}>
-        <Text style={styles.buttonText}>Загрузить ещё факты</Text>
+      <TouchableOpacity style={styles.customButton} onPress={fetchFacts}>
+        <Text style={styles.buttonText}>Обновить список</Text>
       </TouchableOpacity>
+
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Введите свой факт"
+          value={customFact}
+          onChangeText={setCustomFact}
+        />
+        <TouchableOpacity style={styles.customButton} onPress={addCustomFact}>
+          <Text style={styles.buttonText}>Добавить факт</Text>
+        </TouchableOpacity>
+      </View>
 
       <FlatList
         data={facts}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text>{item.text}</Text>
+          <View style={styles.itemRow}>
+            <Text style={{ flex: 1 }}>{item.text}</Text>
+            <TouchableOpacity onPress={() => confirmDelete(item.id)}>
+              <Text style={styles.deleteText}>Удалить</Text>
+            </TouchableOpacity>
           </View>
         )}
       />
@@ -116,7 +172,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  item: {
+  itemRow: {
+    flexDirection: "row",
+    alignItems: "center",
     padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
@@ -126,23 +184,39 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    marginBottom: 10,
+  },
   customButton: {
     backgroundColor: "#28a745",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderRadius: 10,
     alignItems: "center",
-    margin: 15,
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    marginTop: 10,
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  inputContainer: {
+    padding: 15,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginBottom: 10,
+  },
+  deleteText: {
+    color: "red",
+    fontSize: 14,
+    marginLeft: 10,
   },
 });
 
