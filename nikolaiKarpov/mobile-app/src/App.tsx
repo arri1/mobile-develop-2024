@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './App.css';
 
 const App: React.FC = () => {
-  // Состояние для счётчика
   const [count, setCount] = useState<number>(0);
-  
-  // Состояние для текста
   const [text, setText] = useState<string>('');
+
+  const calculateSum = (n: number): number => {
+    console.log('Calculating sum...');
+    let sum = 0;
+    for (let i = 1; i <= n; i++) {
+      sum += i;
+    }
+    return sum;
+  };
+
+  const memoizedSum = useMemo(() => calculateSum(count), [count]);
 
   return (
     <div className="app">
@@ -17,6 +25,7 @@ const App: React.FC = () => {
         <button onClick={() => setCount(count + 1)}>Увеличить</button>
         <button onClick={() => setCount(count - 1)}>Уменьшить</button>
         <button onClick={() => setCount(0)}>Сбросить</button>
+        <p>Сумма от 1 до {count}: {memoizedSum}</p>
       </div>
 
       <div className="text-section">
