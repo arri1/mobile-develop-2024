@@ -13,7 +13,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Счётчик: {count}</Text>
+      <Text style={styles.text}>Счётчик : {count}</Text>
 
       <View style={styles.buttonContainer}>
         <Button title="Увеличить (+)" onPress={increment} />
