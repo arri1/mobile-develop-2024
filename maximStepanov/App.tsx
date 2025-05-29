@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import {View, Text, Button, StyleSheet, Platform, ToastAndroid, Alert,
 } from 'react-native';
@@ -9,27 +10,10 @@ const App = () => {
   const decrement = (): void => setCount(count > 0 ? count - 1 : 0);
   const reset = (): void => setCount(0);
 
-  const countLevel = useMemo(() => {
-    if (count === 0) return 'Пусто';
-    if (count < 5) return 'Низкий';
-    if (count < 10) return 'Средний';
-    return 'Высокий';
-  }, [count]);
-
-  useEffect(() => {
-    const message = `Счётчик: ${count} (${countLevel})`;
-
-    if (Platform.OS === 'android') {
-      ToastAndroid.show(message, ToastAndroid.SHORT);
-    } else {
-      Alert.alert('Счётчик', message);
-    }
-  }, [count, countLevel]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Счётчик: {count}</Text>
-      <Text style={styles.subtext}>Уровень: {countLevel}</Text>
 
       <View style={styles.buttonContainer}>
         <Button title="Увеличить (+)" onPress={increment} />
