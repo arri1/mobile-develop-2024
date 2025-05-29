@@ -1,40 +1,41 @@
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import { RootStackParamList } from './navigation';
 
 type UseStateScreenNavigationProp = StackNavigationProp<RootStackParamList, 'UseState'>;
 
 type Props = {
-  navigation: UseStateScreenNavigationProp;
+    navigation: UseStateScreenNavigationProp;
 };
 
 const UseStateScreen: React.FC<Props> = ({ navigation }) => {
-  const [count, setCount] = useState(0);
-  const increment = () => setCount(count + 1);
-  const decrement = () => setCount(count > 0 ? count - 1 : 0);
-  const reset = () => setCount(0);
+  const [count, setCount] = useState<number>(0);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Счётчик: {count}</Text>
-      <View style={styles.buttonContainer}>
-        <Button title="Увеличить (+)" onPress={increment} />
-        <Button title="Уменьшить (-)" onPress={decrement} />
-        <Button title="Сбросить" onPress={reset} color="#ff5555" />
-      </View>
-      <View style={styles.navigationButton}>
+      <Text style={styles.text}>You clicked {count} times</Text>
+      <Button
+        title="Click me"
+        onPress={() => setCount(count + 1)} // Обновляем состояние при нажатии на кнопку
+      />
         <Button title="Перейти к useEffect" onPress={() => navigation.navigate('UseEffect')} />
-      </View>
     </View>
+    
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  text: { fontSize: 28, marginBottom: 10 },
-  buttonContainer: { flexDirection: 'row', gap: 10 },
-  navigationButton: { marginTop: 30 },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  text: {
+    fontSize: 20,
+    marginBottom: 20,
+  },
 });
 
 export default UseStateScreen;

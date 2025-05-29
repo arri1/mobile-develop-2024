@@ -62,7 +62,7 @@ const UseEffectScreen: React.FC<Props> = ({ navigation }) => {
         )}
       />
       <View style={{ marginTop: 20 }}>
-        <Button title="Назад к useState" onPress={() => navigation.navigate('UseState')} />
+        <Button title="Назад к useState" onPress={() => navigation.goBack()} />
       </View>
     </View>
   );
