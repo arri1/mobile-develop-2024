@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, StyleSheet, ToastAndroid, Platform, Alert } from 'react-native';
 
 const App = () => {
-  // Указываем тип для состояния (number)
   const [count, setCount] = useState<number>(0);
 
-  // Типизированные функции
   const increment = (): void => setCount(count + 1);
-  const decrement = (): void => setCount(count > 0 ? count - 1 : 0); // Защита от отрицательных значений
+  const decrement = (): void => setCount(count > 0 ? count - 1 : 0);
   const reset = (): void => setCount(0);
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      ToastAndroid.show(`Счётчик: ${count}`, ToastAndroid.SHORT);
+    } else {
+      Alert.alert('Изменение счётчика', `Счётчик: ${count}`);
+    }
+  }, [count]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Счётчик: {count}</Text>
-      
       <View style={styles.buttonContainer}>
         <Button title="Увеличить (+)" onPress={increment} />
         <Button title="Уменьшить (-)" onPress={decrement} />
@@ -23,7 +28,6 @@ const App = () => {
   );
 };
 
-// Стили с TypeScript (типы StyleSheet автоматически выводятся)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
