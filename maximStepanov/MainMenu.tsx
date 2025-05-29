@@ -13,6 +13,7 @@ const MainMenu = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Главное меню</Text>
       <Button title="Открыть счётчик (useState)" onPress={() => navigation.navigate('UseStateCounter')} />
+      <Button title="Открыть useEffect" onPress={() => navigation.navigate('UseEffectScreen')} /> 
     </View>
   );
 };
