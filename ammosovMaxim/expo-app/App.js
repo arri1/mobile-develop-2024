@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Counter from './components/useState/useState';
 import Weather from './components/useEffect/useEffect';
+import PrimeCount from './components/useMemo/useMemo';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,6 +22,11 @@ export default function App() {
             name="useEffect"
             component={Weather}
             options={{ title: 'useEffect' }}
+          />
+          <Tab.Screen
+            name="useMemo"
+            component={PrimeCount}
+            options={{ title: 'useMemo' }}
           />
         </Tab.Navigator>
       <StatusBar style="auto" />
