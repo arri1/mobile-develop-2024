@@ -12,6 +12,7 @@ import RegisterScreen from './loginRegisterScreens/RegisterScreen';
 import { useAuthStore } from './stores/auth';
 import { TouchableOpacity, Text } from 'react-native';
 import { colors } from './theme/colors';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -31,22 +32,51 @@ export default function App() {
                 <Text style={{ color: colors.primary, fontWeight: '600' }}>Logout</Text>
               </TouchableOpacity>
             ),
+            tabBarActiveTintColor: colors.primary,
+            tabBarInactiveTintColor: 'gray',
           }}
         >
           <Tab.Screen
             name="useState"
             component={Counter}
-            options={{ title: 'useState' }}
+            options={{
+              title: 'useState',
+              tabBarIcon: ({ focused, color, size }) => (
+                <Ionicons 
+                  name={focused ? 'radio-button-on' : 'radio-button-off'} 
+                  size={size} 
+                  color={color} 
+                />
+              ),
+            }}
           />
           <Tab.Screen
             name="useEffect"
             component={Weather}
-            options={{ title: 'useEffect' }}
+            options={{
+              title: 'useEffect',
+              tabBarIcon: ({ focused, color, size }) => (
+                <Ionicons 
+                  name={focused ? 'cloud' : 'cloud-outline'} 
+                  size={size} 
+                  color={color} 
+                />
+              ),
+            }}
           />
           <Tab.Screen
             name="useMemo"
             component={PrimeCount}
-            options={{ title: 'useMemo' }}
+            options={{
+              title: 'useMemo',
+              tabBarIcon: ({ focused, color, size }) => (
+                <Ionicons 
+                  name={focused ? 'calculator' : 'calculator-outline'} 
+                  size={size} 
+                  color={color} 
+                />
+              ),
+            }}
           />
         </Tab.Navigator>
       ) : (
@@ -67,4 +97,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
